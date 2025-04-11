@@ -3,13 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>The Healthy Box - Demo con Navegación</title>
+    <title>The Healthy Box - Demo Interactivo</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
     <style>
       /* Estilos generales */
       body {
@@ -18,7 +15,6 @@
         background-color: #f6f8f9;
         color: #333;
       }
-
       /* Header */
       header {
         display: flex;
@@ -26,7 +22,7 @@
         justify-content: space-between;
         padding: 10px 20px;
         background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       }
       .logo-container img {
         height: 50px;
@@ -43,16 +39,14 @@
         color: #333;
         font-weight: 600;
       }
-
-      /* Secciones */
+      /* Secciones (inicialmente ocultas) */
       .section-content {
-        display: none; /* Por defecto se ocultan todas las secciones; la JS decidirá cuál mostrar */
+        display: none; /* Todas se ocultan; se muestra la correspondiente con JS */
         padding: 20px;
         max-width: 1200px;
         margin: 0 auto;
       }
-
-      /* Sección Inicio (Hero + tarjetas) */
+      /* Sección de Inicio (Hero + tarjetas) */
       .hero {
         display: flex;
         flex-direction: column;
@@ -85,7 +79,6 @@
       .hero button:hover {
         background-color: #276b26;
       }
-
       .cards-container {
         display: flex;
         flex-wrap: wrap;
@@ -98,7 +91,7 @@
         flex: 1 1 300px;
         min-width: 280px;
         padding: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         border-radius: 8px;
       }
       .card h2 {
@@ -110,17 +103,36 @@
         color: #555;
         padding-left: 10px;
       }
-
       /* Footer */
       footer {
         text-align: center;
         padding: 20px;
         background-color: #fff;
-        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
       }
       footer p {
         margin: 0;
         color: #999;
+      }
+      /* Formulario de Insumos */
+      #insumos-form label {
+        display: block;
+        margin-bottom: 8px;
+      }
+      #insumos-form input {
+        width: 100px;
+      }
+      #insumos-form button {
+        margin-top: 10px;
+        background-color: #2b772a;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      #insumos-form button:hover {
+        background-color: #276b26;
       }
     </style>
   </head>
@@ -128,12 +140,12 @@
     <!-- Encabezado -->
     <header>
       <div class="logo-container">
-        <!-- Reemplaza "tu_imagen_healthy_box.png" con la ruta de tu imagen si deseas -->
-        <img src="tu_imagen_healthy_box.png" alt="The Healthy Box - Logo">
+        <!-- Asegúrate de tener la imagen en la carpeta correcta, por ejemplo: img/mi-logo.png -->
+        <img src="img/mi-logo.png" alt="The Healthy Box - Logo">
       </div>
       <nav>
         <ul>
-          <!-- Cada link tiene un data-section que indica cuál sección va a mostrar -->
+          <!-- Cada enlace tiene un atributo data-section para identificar la sección -->
           <li><a href="#" class="nav-link" data-section="inicio">Inicio</a></li>
           <li><a href="#" class="nav-link" data-section="menu">Menú</a></li>
           <li><a href="#" class="nav-link" data-section="pedidos">Pedidos</a></li>
@@ -145,14 +157,13 @@
       </nav>
     </header>
 
-    <!-- Sección de Inicio (por defecto se mostrará) -->
+    <!-- Sección de Inicio -->
     <section id="seccion-inicio" class="section-content">
       <div class="hero">
         <h1>The Healthy Box</h1>
         <p>Gestión completa para pedidos, ventas e inventario de comida saludable.</p>
         <button id="btnMenuSemanal">Ver Menú Semanal</button>
       </div>
-
       <div class="cards-container">
         <div class="card">
           <h2>Ventas Recientes</h2>
@@ -166,12 +177,6 @@
             <li>Cliente 2: Entrega 13/04</li>
             <li>Cliente 3: Entrega 14/04</li>
           </ul>
-        </div>
-        <div class="card">
-          <h2>Stock de Insumos</h2>
-          <p>Lechuga: 15 unidades</p>
-          <p>Pollo: 3 Kg</p>
-          <p>Atún: 10 latas</p>
         </div>
         <div class="card">
           <h2>Top Platos Vendidos</h2>
@@ -200,10 +205,26 @@
       <p>Aquí podrías listar y editar la información de tus clientes.</p>
     </section>
 
-    <!-- Sección Insumos -->
+    <!-- Sección Insumos (con funcionalidad para sumar) -->
     <section id="seccion-insumos" class="section-content">
       <h2>Insumos</h2>
-      <p>Aquí podrías manejar tu inventario de ingredientes, verificar stock, etc.</p>
+      <p>Aquí puedes ingresar las cantidades de tus insumos y calcular el total.</p>
+      <form id="insumos-form">
+        <label>
+          Lechuga (unidades):
+          <input type="number" id="lechuga" value="15" min="0">
+        </label>
+        <label>
+          Pollo (kg):
+          <input type="number" id="pollo" value="3" min="0">
+        </label>
+        <label>
+          Atún (latas):
+          <input type="number" id="atun" value="10" min="0">
+        </label>
+        <button type="button" id="sumar-insumos">Sumar insumos</button>
+      </form>
+      <h3>Total de insumos: <span id="total-insumos">0</span></h3>
     </section>
 
     <!-- Sección Reportes -->
@@ -212,10 +233,10 @@
       <p>Aquí se podrían visualizar gráficas y estadísticas de ventas, clientes, etc.</p>
     </section>
 
-    <!-- Sección Salir (o Cerrar Sesión) -->
+    <!-- Sección Salir -->
     <section id="seccion-salir" class="section-content">
       <h2>Salir</h2>
-      <p>Puedes implementar un proceso de cierre de sesión o simplemente mostrar un mensaje.</p>
+      <p>Aquí podrías implementar un cierre de sesión o mostrar un mensaje.</p>
     </section>
 
     <!-- Pie de página -->
@@ -223,33 +244,37 @@
       <p>&copy; 2025 The Healthy Box. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- JavaScript para la Navegación entre Secciones -->
+    <!-- JavaScript para navegación y suma de insumos -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const links = document.querySelectorAll(".nav-link");
         const sections = document.querySelectorAll(".section-content");
 
-        // Mostrar por defecto la sección de "Inicio"
+        // Mostrar la sección de "Inicio" por defecto
         document.getElementById("seccion-inicio").style.display = "block";
 
-        // Manejar el clic en cada enlace de navegación
+        // Navegación: mostrar la sección correspondiente al hacer clic en un enlace
         links.forEach((link) => {
           link.addEventListener("click", (event) => {
             event.preventDefault();
-            // Obtener el valor del data-section (inicio, menu, pedidos, etc.)
             const sectionToShow = link.getAttribute("data-section");
-
-            // Ocultar todas las secciones
             sections.forEach((sec) => (sec.style.display = "none"));
-
-            // Mostrar la sección solicitada
             document.getElementById(`seccion-${sectionToShow}`).style.display = "block";
           });
         });
 
-        // Ejemplo: acción al hacer clic en el botón "Ver Menú Semanal"
+        // Ejemplo: acción del botón "Ver Menú Semanal" en la sección de Inicio
         document.getElementById("btnMenuSemanal").addEventListener("click", () => {
           alert("Aquí se mostraría el menú semanal. Puedes personalizar esta parte.");
+        });
+
+        // Funcionalidad para sumar insumos
+        document.getElementById("sumar-insumos").addEventListener("click", () => {
+          const lechuga = parseFloat(document.getElementById("lechuga").value) || 0;
+          const pollo = parseFloat(document.getElementById("pollo").value) || 0;
+          const atun = parseFloat(document.getElementById("atun").value) || 0;
+          const total = lechuga + pollo + atun;
+          document.getElementById("total-insumos").innerText = total;
         });
       });
     </script>
