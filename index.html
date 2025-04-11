@@ -27,12 +27,12 @@
     body {
       font-family: 'Open Sans', sans-serif;
       color: #333;
-      /* Fondo con imagen: Ajusta fondo1.png si se llama distinto */
-      background: url("img/milogo.png") no-repeat center center fixed;
+      /* Fondo con imagen: Asegúrate que el archivo fondo1.png esté en la carpeta img */
+      background: url("img/fondo1.png") no-repeat center center fixed;
       background-size: cover;
       position: relative;
     }
-    /* Overlay semitransparente para legibilidad */
+    /* Overlay semitransparente para mejorar legibilidad */
     body::before {
       content: "";
       position: fixed;
@@ -51,7 +51,7 @@
       box-shadow: var(--card-shadow);
     }
     .logo-container img {
-      height: 50px; /* Ajusta si quieres más grande o más pequeño */
+      height: 50px;
     }
     nav ul {
       list-style: none;
@@ -71,7 +71,7 @@
 
     /* ==================== SECCIONES ==================== */
     .section-content {
-      display: none; /* Sólo se muestra la sección activa con JS */
+      display: none; /* Sólo se muestra la sección activa mediante JavaScript */
       max-width: 1200px;
       margin: 20px auto;
       background-color: var(--bg-overlay);
@@ -89,7 +89,7 @@
       text-align: center;
       padding: 40px 20px;
       border-radius: var(--border-radius);
-      /* Imagen de fondo hero: ajusta logo2.png si se llama distinto */
+      /* Imagen de fondo de la hero: Asegúrate que fondo2.png esté en la carpeta img */
       background: url("img/fondo2.png") no-repeat center center;
       background-size: cover;
       position: relative;
@@ -107,7 +107,7 @@
       z-index: 1;
     }
     .hero h1, .hero p, .hero button {
-      position: relative; /* Superponen al overlay */
+      position: relative; /* Para que se muestren sobre el overlay */
       z-index: 2;
     }
     .hero h1 {
@@ -223,8 +223,39 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      background-color: #d9534f; /* Rojo para borrar */
+      background-color: #d9534f;
       color: #fff;
+    }
+
+    /* ==================== SECCIÓN SALIR (FINALIZAR SESIÓN) ==================== */
+    /* La sección de Salir muestra un mensaje con la fecha actual de cierre de sesión
+       y un botón para volver a "entrar" (simulado) */
+    .salida-container {
+      text-align: center;
+      padding: 30px;
+    }
+    .salida-container h2 {
+      font-size: 2rem;
+      color: var(--main-green);
+      margin-bottom: 15px;
+    }
+    .salida-container p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    .salida-container button {
+      background-color: var(--main-green);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+    }
+    .salida-container button:hover {
+      background-color: var(--main-green-dark);
     }
 
     /* ==================== FOOTER ==================== */
@@ -245,7 +276,7 @@
   <!-- ENCABEZADO -->
   <header>
     <div class="logo-container">
-      <!-- LOGO: Asegúrate de haber subido logo.png a la carpeta img/ -->
+      <!-- Asegúrate de tener el logo en img/logo.png -->
       <img src="img/logo.png" alt="The Healthy Box - Logo">
     </div>
     <nav>
@@ -422,9 +453,11 @@
 
   <!-- SECCIÓN: SALIR -->
   <section id="seccion-salir" class="section-content">
-    <h2>Salir</h2>
-    <p>Aquí se podría implementar la funcionalidad de cierre de sesión, o un enlace que devuelva al “Login”.  
-       Por el momento, solo muestra este mensaje.</p>
+    <div class="salida-container">
+      <h2>¡Hasta pronto!</h2>
+      <p id="mensaje-salida"></p>
+      <button id="btnEntrarSesion">Entrar a sesión</button>
+    </div>
   </section>
 
   <!-- FOOTER -->
@@ -434,7 +467,9 @@
 
   <!-- JAVASCRIPT: LÓGICA DE LA APP -->
   <script>
-    /* ================= DATOS EN LOCALSTORAGE ================= */
+    /********************************************************
+     *           DATOS EN LOCALSTORAGE
+     ********************************************************/
     let menu = [];         // { id, nombre, precio, descripcion }
     let clientes = [];     // { id, nombre, telefono, direccion }
     let pedidos = [];      // { id, clienteId, platoId, estado }
@@ -462,7 +497,9 @@
       localStorage.setItem("insumos", JSON.stringify(insumos));
     }
 
-    /* ================= LÓGICA DE MENÚ ================= */
+    /********************************************************
+     *                      MENÚ
+     ********************************************************/
     function renderMenu() {
       const tbody = document.querySelector("#tabla-menu tbody");
       tbody.innerHTML = "";
@@ -495,7 +532,9 @@
       renderReportes();
     }
 
-    /* ================= LÓGICA DE CLIENTES ================= */
+    /********************************************************
+     *                     CLIENTES
+     ********************************************************/
     function renderClientes() {
       const tbody = document.querySelector("#tabla-clientes tbody");
       tbody.innerHTML = "";
@@ -532,7 +571,9 @@
       renderReportes();
     }
 
-    /* ================= LÓGICA DE PEDIDOS ================= */
+    /********************************************************
+     *                     PEDIDOS
+     ********************************************************/
     function renderPedidos() {
       const tbody = document.querySelector("#tabla-pedidos tbody");
       tbody.innerHTML = "";
@@ -550,7 +591,6 @@
         `;
         tbody.appendChild(tr);
       });
-      // Próximos pedidos en el Inicio
       const listaProx = document.getElementById("lista-proximos-pedidos");
       listaProx.innerHTML = "";
       const pendientes = pedidos
@@ -570,7 +610,9 @@
       renderReportes();
     }
 
-    /* ================= LÓGICA DE INSUMOS ================= */
+    /********************************************************
+     *                     INSUMOS
+     ********************************************************/
     function renderInsumos() {
       const tbody = document.querySelector("#tabla-insumos tbody");
       tbody.innerHTML = "";
@@ -594,7 +636,9 @@
       renderReportes();
     }
 
-    /* ================= LÓGICA DE REPORTES ================= */
+    /********************************************************
+     *                    REPORTES
+     ********************************************************/
     function renderReportes() {
       document.getElementById("reporte-total-clientes").textContent =
         `Total de clientes: ${clientes.length}`;
@@ -636,11 +680,13 @@
       });
     }
 
-    /* ================= INICIALIZACIÓN ================= */
+    /********************************************************
+     *                INICIALIZACIÓN Y EVENTOS GLOBALES
+     ********************************************************/
     document.addEventListener("DOMContentLoaded", () => {
-      loadData(); // 1. Cargar desde LocalStorage
+      loadData();
 
-      // 2. Configurar navegación
+      // Configurar navegación
       const links = document.querySelectorAll(".nav-link");
       const sections = document.querySelectorAll(".section-content");
       document.getElementById("seccion-inicio").style.display = "block";
@@ -650,19 +696,18 @@
           const sectionToShow = link.getAttribute("data-section");
           sections.forEach(sec => sec.style.display = "none");
           document.getElementById(`seccion-${sectionToShow}`).style.display = "block";
-          // Actualiza reportes si es Inicio o Reportes
           if(sectionToShow === "inicio" || sectionToShow === "reportes"){
             renderReportes();
           }
         });
       });
 
-      // Botón en la Hero:
+      // Botón "Ver Menú Semanal" en la hero
       document.getElementById("btnMenuSemanal").addEventListener("click", () => {
-        alert("Aquí podrías mostrar un calendario o lista detallada del menú semanal.");
+        alert("Aquí podrías mostrar un calendario o una lista detallada del menú semanal.");
       });
 
-      // 3. Configurar formularios
+      // Configurar formularios
       document.getElementById("form-menu").addEventListener("submit", e => {
         e.preventDefault();
         const nombre = document.getElementById("menu-nombre").value.trim();
@@ -707,12 +752,34 @@
         e.target.reset();
       });
 
-      // 4. Render inicial
+      // Render inicial
       renderMenu();
       renderClientes();
       renderPedidos();
       renderInsumos();
       renderReportes();
+
+      /*************** Configurar sección "Salir" ***************/
+      // Actualizar el mensaje de salida con la fecha y hora actuales
+      const mensajeSalida = document.getElementById("mensaje-salida");
+      if(mensajeSalida) {
+        const fechaActual = new Date();
+        mensajeSalida.textContent =
+          "Tu sesión finalizó el " +
+          fechaActual.toLocaleDateString() +
+          " a las " +
+          fechaActual.toLocaleTimeString();
+      }
+      // Configurar el botón para "Entrar a sesión"
+      const btnEntrarSesion = document.getElementById("btnEntrarSesion");
+      if(btnEntrarSesion) {
+        btnEntrarSesion.addEventListener("click", () => {
+          // Para simular el ingreso a sesión, mostramos un mensaje y regresamos a la sección inicio.
+          alert("Por favor, ingresa tu sesión. (Esta es una simulación de login.)");
+          sections.forEach(sec => sec.style.display = "none");
+          document.getElementById("seccion-inicio").style.display = "block";
+        });
+      }
     });
   </script>
 </body>
