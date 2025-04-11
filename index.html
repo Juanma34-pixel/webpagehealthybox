@@ -1,21 +1,14 @@
-<!-- Para mostrar un logo: -->
-<img src="img/milogo.png" alt="Logo The Healthy Box">
-
-<!-- Para usar un fondo en el CSS dentro de style="...": -->
-<div style="background: url('img/logo2.png') no-repeat center center; ...">
-  ...
-</div>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>The Healthy Box - Proyecto Saludable</title>
+  <title>The Healthy Box - Proyecto Final</title>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="stylesheet" 
         href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
+
   <style>
     /* ==================== VARIABLES Y RESET ==================== */
     :root {
@@ -26,8 +19,7 @@
       --border-radius: 8px;
     }
     * {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       box-sizing: border-box;
     }
 
@@ -35,12 +27,12 @@
     body {
       font-family: 'Open Sans', sans-serif;
       color: #333;
-      /fondo1.png/
-      background: url("img/fondo1.png") no-repeat center center fixed;
+      /* Fondo con imagen: Ajusta fondo1.png si se llama distinto */
+      background: url("img/milogo.png") no-repeat center center fixed;
       background-size: cover;
       position: relative;
     }
-    /* Overlay para suavizar el fondo y mejorar la legibilidad */
+    /* Overlay semitransparente para legibilidad */
     body::before {
       content: "";
       position: fixed;
@@ -59,7 +51,7 @@
       box-shadow: var(--card-shadow);
     }
     .logo-container img {
-      height: 50px;
+      height: 50px; /* Ajusta si quieres más grande o más pequeño */
     }
     nav ul {
       list-style: none;
@@ -79,7 +71,7 @@
 
     /* ==================== SECCIONES ==================== */
     .section-content {
-      display: none; /* Se muestra la sección activa mediante JavaScript */
+      display: none; /* Sólo se muestra la sección activa con JS */
       max-width: 1200px;
       margin: 20px auto;
       background-color: var(--bg-overlay);
@@ -97,7 +89,7 @@
       text-align: center;
       padding: 40px 20px;
       border-radius: var(--border-radius);
-      /* Imagen de fondo para la sección hero (reemplaza 'fondo2.png' por tu imagen) */
+      /* Imagen de fondo hero: ajusta logo2.png si se llama distinto */
       background: url("img/fondo2.png") no-repeat center center;
       background-size: cover;
       position: relative;
@@ -105,7 +97,6 @@
       margin-bottom: 20px;
       color: #fff;
     }
-    /* Overlay oscuro para la hero */
     .hero::after {
       content: "";
       position: absolute;
@@ -116,7 +107,7 @@
       z-index: 1;
     }
     .hero h1, .hero p, .hero button {
-      position: relative;
+      position: relative; /* Superponen al overlay */
       z-index: 2;
     }
     .hero h1 {
@@ -142,6 +133,7 @@
       background-color: var(--main-green-dark);
     }
 
+    /* ==================== CARDS ==================== */
     .cards-container {
       display: flex;
       flex-wrap: wrap;
@@ -231,7 +223,7 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      background-color: #d9534f;
+      background-color: #d9534f; /* Rojo para borrar */
       color: #fff;
     }
 
@@ -253,8 +245,8 @@
   <!-- ENCABEZADO -->
   <header>
     <div class="logo-container">
-      <!-- Logo (asegúrate de tener la imagen en img/mi-logo.png) -->
-      <img src="img/mi-logo.png" alt="The Healthy Box - Logo">
+      <!-- LOGO: Asegúrate de haber subido logo.png a la carpeta img/ -->
+      <img src="img/logo.png" alt="The Healthy Box - Logo">
     </div>
     <nav>
       <ul>
@@ -431,7 +423,8 @@
   <!-- SECCIÓN: SALIR -->
   <section id="seccion-salir" class="section-content">
     <h2>Salir</h2>
-    <p>Aquí se podría implementar la funcionalidad de cierre de sesión. Por ahora, muestra un mensaje.</p>
+    <p>Aquí se podría implementar la funcionalidad de cierre de sesión, o un enlace que devuelva al “Login”.  
+       Por el momento, solo muestra este mensaje.</p>
   </section>
 
   <!-- FOOTER -->
@@ -439,15 +432,13 @@
     <p>&copy; 2025 The Healthy Box. Todos los derechos reservados.</p>
   </footer>
 
-  <!-- JAVASCRIPT -->
+  <!-- JAVASCRIPT: LÓGICA DE LA APP -->
   <script>
-    /********************************************************
-     *           ESTRUCTURAS DE DATOS EN LOCALSTORAGE
-     ********************************************************/
-    let menu = [];        // { id, nombre, precio, descripcion }
-    let clientes = [];    // { id, nombre, telefono, direccion }
-    let pedidos = [];     // { id, clienteId, platoId, estado }
-    let insumos = [];     // { id, nombre, cantidad, unidad }
+    /* ================= DATOS EN LOCALSTORAGE ================= */
+    let menu = [];         // { id, nombre, precio, descripcion }
+    let clientes = [];     // { id, nombre, telefono, direccion }
+    let pedidos = [];      // { id, clienteId, platoId, estado }
+    let insumos = [];      // { id, nombre, cantidad, unidad }
 
     function generateId() {
       return Date.now() + "" + Math.floor(Math.random() * 1000);
@@ -458,10 +449,10 @@
       const clientesData = localStorage.getItem("clientes");
       const pedidosData = localStorage.getItem("pedidos");
       const insumosData = localStorage.getItem("insumos");
-      if(menuData) menu = JSON.parse(menuData);
-      if(clientesData) clientes = JSON.parse(clientesData);
-      if(pedidosData) pedidos = JSON.parse(pedidosData);
-      if(insumosData) insumos = JSON.parse(insumosData);
+      if (menuData) menu = JSON.parse(menuData);
+      if (clientesData) clientes = JSON.parse(clientesData);
+      if (pedidosData) pedidos = JSON.parse(pedidosData);
+      if (insumosData) insumos = JSON.parse(insumosData);
     }
 
     function saveData() {
@@ -471,9 +462,7 @@
       localStorage.setItem("insumos", JSON.stringify(insumos));
     }
 
-    /********************************************************
-     *                      MENÚ
-     ********************************************************/
+    /* ================= LÓGICA DE MENÚ ================= */
     function renderMenu() {
       const tbody = document.querySelector("#tabla-menu tbody");
       tbody.innerHTML = "";
@@ -484,7 +473,7 @@
           <td>$${plato.precio}</td>
           <td>${plato.descripcion || ""}</td>
           <td>
-            <button onclick="eliminarPlato('${plato.id}')" style="background-color:#d9534f;color:#fff;">Borrar</button>
+            <button onclick="eliminarPlato('${plato.id}')">Borrar</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -506,9 +495,7 @@
       renderReportes();
     }
 
-    /********************************************************
-     *                     CLIENTES
-     ********************************************************/
+    /* ================= LÓGICA DE CLIENTES ================= */
     function renderClientes() {
       const tbody = document.querySelector("#tabla-clientes tbody");
       tbody.innerHTML = "";
@@ -519,7 +506,7 @@
           <td>${cliente.telefono}</td>
           <td>${cliente.direccion}</td>
           <td>
-            <button onclick="eliminarCliente('${cliente.id}')" style="background-color:#d9534f;color:#fff;">Borrar</button>
+            <button onclick="eliminarCliente('${cliente.id}')">Borrar</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -535,7 +522,7 @@
     }
     function eliminarCliente(id) {
       const clienteTienePedidos = pedidos.some(p => p.clienteId === id);
-      if(clienteTienePedidos) {
+      if (clienteTienePedidos) {
         alert("No se puede eliminar el cliente porque tiene pedidos asociados.");
         return;
       }
@@ -545,9 +532,7 @@
       renderReportes();
     }
 
-    /********************************************************
-     *                     PEDIDOS
-     ********************************************************/
+    /* ================= LÓGICA DE PEDIDOS ================= */
     function renderPedidos() {
       const tbody = document.querySelector("#tabla-pedidos tbody");
       tbody.innerHTML = "";
@@ -560,11 +545,12 @@
           <td>${plato ? plato.nombre : "Plato no encontrado"}</td>
           <td>${pedido.estado}</td>
           <td>
-            <button onclick="eliminarPedido('${pedido.id}')" style="background-color:#d9534f;color:#fff;">Borrar</button>
+            <button onclick="eliminarPedido('${pedido.id}')">Borrar</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
+      // Próximos pedidos en el Inicio
       const listaProx = document.getElementById("lista-proximos-pedidos");
       listaProx.innerHTML = "";
       const pendientes = pedidos
@@ -584,9 +570,7 @@
       renderReportes();
     }
 
-    /********************************************************
-     *                     INSUMOS
-     ********************************************************/
+    /* ================= LÓGICA DE INSUMOS ================= */
     function renderInsumos() {
       const tbody = document.querySelector("#tabla-insumos tbody");
       tbody.innerHTML = "";
@@ -597,7 +581,7 @@
           <td>${i.cantidad}</td>
           <td>${i.unidad}</td>
           <td>
-            <button onclick="eliminarInsumo('${i.id}')" style="background-color:#d9534f;color:#fff;">Borrar</button>
+            <button onclick="eliminarInsumo('${i.id}')">Borrar</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -610,9 +594,7 @@
       renderReportes();
     }
 
-    /********************************************************
-     *                    REPORTES
-     ********************************************************/
+    /* ================= LÓGICA DE REPORTES ================= */
     function renderReportes() {
       document.getElementById("reporte-total-clientes").textContent =
         `Total de clientes: ${clientes.length}`;
@@ -627,7 +609,7 @@
       const pedidosEntregados = pedidos.filter(p => p.estado === "Entregado");
       pedidosEntregados.forEach(ped => {
         const plato = menu.find(m => m.id === ped.platoId);
-        if(plato) totalVentas += Number(plato.precio);
+        if (plato) totalVentas += Number(plato.precio);
       });
       document.getElementById("ventas-hoy").textContent =
         `Total de ventas hoy: $${totalVentas}`;
@@ -643,22 +625,22 @@
         if(!conteo[p.platoId]) conteo[p.platoId] = 0;
         conteo[p.platoId]++;
       });
-      const ordenado = Object.entries(conteo).sort((a, b) => b[1] - a[1]);
-      ordenado.slice(0,3).forEach(([idPlato, cantidad]) => {
+      const ordenado = Object.entries(conteo).sort((a,b) => b[1] - a[1]);
+      ordenado.slice(0,3).forEach(([idPlato, count]) => {
         const plato = menu.find(m => m.id === idPlato);
         if(plato) {
           const li = document.createElement("li");
-          li.textContent = `${plato.nombre} (vendidos: ${cantidad})`;
+          li.textContent = `${plato.nombre} (vendidos: ${count})`;
           topUl.appendChild(li);
         }
       });
     }
 
-    /********************************************************
-     *             INICIALIZACIÓN Y EVENTOS GLOBALES
-     ********************************************************/
+    /* ================= INICIALIZACIÓN ================= */
     document.addEventListener("DOMContentLoaded", () => {
-      loadData();
+      loadData(); // 1. Cargar desde LocalStorage
+
+      // 2. Configurar navegación
       const links = document.querySelectorAll(".nav-link");
       const sections = document.querySelectorAll(".section-content");
       document.getElementById("seccion-inicio").style.display = "block";
@@ -668,16 +650,19 @@
           const sectionToShow = link.getAttribute("data-section");
           sections.forEach(sec => sec.style.display = "none");
           document.getElementById(`seccion-${sectionToShow}`).style.display = "block";
-          if(sectionToShow === "inicio" || sectionToShow === "reportes") {
+          // Actualiza reportes si es Inicio o Reportes
+          if(sectionToShow === "inicio" || sectionToShow === "reportes"){
             renderReportes();
           }
         });
       });
+
+      // Botón en la Hero:
       document.getElementById("btnMenuSemanal").addEventListener("click", () => {
-        alert("Aquí podrías mostrar un calendario con platos. Personaliza esta parte a tu gusto.");
+        alert("Aquí podrías mostrar un calendario o lista detallada del menú semanal.");
       });
 
-      // Formularios:
+      // 3. Configurar formularios
       document.getElementById("form-menu").addEventListener("submit", e => {
         e.preventDefault();
         const nombre = document.getElementById("menu-nombre").value.trim();
@@ -722,6 +707,7 @@
         e.target.reset();
       });
 
+      // 4. Render inicial
       renderMenu();
       renderClientes();
       renderPedidos();
