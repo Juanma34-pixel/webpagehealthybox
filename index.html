@@ -2,11 +2,14 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Healthy Box - Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>The Healthy Box - Demo con Navegación</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+    />
     <style>
       /* Estilos generales */
       body {
@@ -15,6 +18,7 @@
         background-color: #f6f8f9;
         color: #333;
       }
+
       /* Header */
       header {
         display: flex;
@@ -39,7 +43,16 @@
         color: #333;
         font-weight: 600;
       }
-      /* Sección Hero */
+
+      /* Secciones */
+      .section-content {
+        display: none; /* Por defecto se ocultan todas las secciones; la JS decidirá cuál mostrar */
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* Sección Inicio (Hero + tarjetas) */
       .hero {
         display: flex;
         flex-direction: column;
@@ -72,15 +85,13 @@
       .hero button:hover {
         background-color: #276b26;
       }
-      /* Tarjetas de información */
-      .section-container {
+
+      .cards-container {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
-        padding: 20px;
-        max-width: 1200px;
-        margin: 0 auto;
         justify-content: center;
+        margin-top: 20px;
       }
       .card {
         background-color: #fff;
@@ -99,6 +110,7 @@
         color: #555;
         padding-left: 10px;
       }
+
       /* Footer */
       footer {
         text-align: center;
@@ -116,68 +128,128 @@
     <!-- Encabezado -->
     <header>
       <div class="logo-container">
-        <img src="img/mi-logo.png" alt="The Healthy Box - Logo">
-        <img src="tu_imagen_healthy_box.png" alt="The Healthy Box - Logo" />
+        <!-- Reemplaza "tu_imagen_healthy_box.png" con la ruta de tu imagen si deseas -->
+        <img src="tu_imagen_healthy_box.png" alt="The Healthy Box - Logo">
       </div>
       <nav>
         <ul>
-          <li><a href="#">Inicio</a></li>
-          <li><a href="#">Menú</a></li>
-          <li><a href="#">Pedidos</a></li>
-          <li><a href="#">Clientes</a></li>
-          <li><a href="#">Insumos</a></li>
-          <li><a href="#">Reportes</a></li>
-          <li><a href="#">Salir</a></li>
+          <!-- Cada link tiene un data-section que indica cuál sección va a mostrar -->
+          <li><a href="#" class="nav-link" data-section="inicio">Inicio</a></li>
+          <li><a href="#" class="nav-link" data-section="menu">Menú</a></li>
+          <li><a href="#" class="nav-link" data-section="pedidos">Pedidos</a></li>
+          <li><a href="#" class="nav-link" data-section="clientes">Clientes</a></li>
+          <li><a href="#" class="nav-link" data-section="insumos">Insumos</a></li>
+          <li><a href="#" class="nav-link" data-section="reportes">Reportes</a></li>
+          <li><a href="#" class="nav-link" data-section="salir">Salir</a></li>
         </ul>
       </nav>
     </header>
 
-    <!-- Sección principal (Hero) -->
-    <section class="hero">
-      <h1>The Healthy Box</h1>
-      <p>Gestión completa para pedidos, ventas e inventario de comida saludable.</p>
-      <button id="btnMenuSemanal">Ver Menú Semanal</button>
+    <!-- Sección de Inicio (por defecto se mostrará) -->
+    <section id="seccion-inicio" class="section-content">
+      <div class="hero">
+        <h1>The Healthy Box</h1>
+        <p>Gestión completa para pedidos, ventas e inventario de comida saludable.</p>
+        <button id="btnMenuSemanal">Ver Menú Semanal</button>
+      </div>
+
+      <div class="cards-container">
+        <div class="card">
+          <h2>Ventas Recientes</h2>
+          <p>Total de ventas hoy: $1,200</p>
+          <p>Resumen semanal: $8,450</p>
+        </div>
+        <div class="card">
+          <h2>Próximos Pedidos</h2>
+          <ul>
+            <li>Cliente 1: Entrega 12/04</li>
+            <li>Cliente 2: Entrega 13/04</li>
+            <li>Cliente 3: Entrega 14/04</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>Stock de Insumos</h2>
+          <p>Lechuga: 15 unidades</p>
+          <p>Pollo: 3 Kg</p>
+          <p>Atún: 10 latas</p>
+        </div>
+        <div class="card">
+          <h2>Top Platos Vendidos</h2>
+          <p>1. Ensalada Detox</p>
+          <p>2. Pollo Grill con Quinoa</p>
+          <p>3. Smoothie Verde</p>
+        </div>
+      </div>
     </section>
 
-    <!-- Tarjetas informativas -->
-    <div class="section-container">
-      <div class="card">
-        <h2>Ventas Recientes</h2>
-        <p>Total de ventas hoy: $1,200</p>
-        <p>Resumen semanal: $8,450</p>
-      </div>
-      <div class="card">
-        <h2>Próximos Pedidos</h2>
-        <ul>
-          <li>Cliente 1: Entrega 12/04</li>
-          <li>Cliente 2: Entrega 13/04</li>
-          <li>Cliente 3: Entrega 14/04</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h2>Stock de Insumos</h2>
-        <p>Lechuga: 15 unidades</p>
-        <p>Pollo: 3 Kg</p>
-        <p>Atún: 10 latas</p>
-      </div>
-      <div class="card">
-        <h2>Top Platos Vendidos</h2>
-        <p>1. Ensalada Detox</p>
-        <p>2. Pollo Grill con Quinoa</p>
-        <p>3. Smoothie Verde</p>
-      </div>
-    </div>
+    <!-- Sección Menú -->
+    <section id="seccion-menu" class="section-content">
+      <h2>Menú</h2>
+      <p>Aquí podrías mostrar el menú semanal o diario con imágenes, precios, etc.</p>
+    </section>
+
+    <!-- Sección Pedidos -->
+    <section id="seccion-pedidos" class="section-content">
+      <h2>Pedidos</h2>
+      <p>Aquí podrías gestionar los pedidos, ver detalles, fechas de entrega, etc.</p>
+    </section>
+
+    <!-- Sección Clientes -->
+    <section id="seccion-clientes" class="section-content">
+      <h2>Clientes</h2>
+      <p>Aquí podrías listar y editar la información de tus clientes.</p>
+    </section>
+
+    <!-- Sección Insumos -->
+    <section id="seccion-insumos" class="section-content">
+      <h2>Insumos</h2>
+      <p>Aquí podrías manejar tu inventario de ingredientes, verificar stock, etc.</p>
+    </section>
+
+    <!-- Sección Reportes -->
+    <section id="seccion-reportes" class="section-content">
+      <h2>Reportes</h2>
+      <p>Aquí se podrían visualizar gráficas y estadísticas de ventas, clientes, etc.</p>
+    </section>
+
+    <!-- Sección Salir (o Cerrar Sesión) -->
+    <section id="seccion-salir" class="section-content">
+      <h2>Salir</h2>
+      <p>Puedes implementar un proceso de cierre de sesión o simplemente mostrar un mensaje.</p>
+    </section>
 
     <!-- Pie de página -->
     <footer>
       <p>&copy; 2025 The Healthy Box. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- JavaScript para la Navegación entre Secciones -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        const links = document.querySelectorAll(".nav-link");
+        const sections = document.querySelectorAll(".section-content");
+
+        // Mostrar por defecto la sección de "Inicio"
+        document.getElementById("seccion-inicio").style.display = "block";
+
+        // Manejar el clic en cada enlace de navegación
+        links.forEach((link) => {
+          link.addEventListener("click", (event) => {
+            event.preventDefault();
+            // Obtener el valor del data-section (inicio, menu, pedidos, etc.)
+            const sectionToShow = link.getAttribute("data-section");
+
+            // Ocultar todas las secciones
+            sections.forEach((sec) => (sec.style.display = "none"));
+
+            // Mostrar la sección solicitada
+            document.getElementById(`seccion-${sectionToShow}`).style.display = "block";
+          });
+        });
+
+        // Ejemplo: acción al hacer clic en el botón "Ver Menú Semanal"
         document.getElementById("btnMenuSemanal").addEventListener("click", () => {
-          alert("Aquí se mostraría el menú semanal. Esta funcionalidad se puede ampliar con más detalles.");
+          alert("Aquí se mostraría el menú semanal. Puedes personalizar esta parte.");
         });
       });
     </script>
