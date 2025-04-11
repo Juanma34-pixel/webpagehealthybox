@@ -1,282 +1,721 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>The Healthy Box - Demo Interactivo</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
-    <style>
-      /* Estilos generales */
-      body {
-        margin: 0;
-        font-family: "Open Sans", sans-serif;
-        background-color: #f6f8f9;
-        color: #333;
-      }
-      /* Header */
-      header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 20px;
-        background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      }
-      .logo-container img {
-        height: 50px;
-      }
-      nav ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        gap: 15px;
-      }
-      nav a {
-        text-decoration: none;
-        color: #333;
-        font-weight: 600;
-      }
-      /* Secciones (inicialmente ocultas) */
-      .section-content {
-        display: none; /* Todas se ocultan; se muestra la correspondiente con JS */
-        padding: 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-      /* Sección de Inicio (Hero + tarjetas) */
-      .hero {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: #e4f7e2;
-        padding: 50px 20px;
-        text-align: center;
-      }
-      .hero h1 {
-        font-size: 2.5rem;
-        margin-bottom: 20px;
-        color: #2b772a;
-      }
-      .hero p {
-        font-size: 1.2rem;
-        margin-bottom: 30px;
-        color: #555;
-      }
-      .hero button {
-        background-color: #2b772a;
-        color: #fff;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1rem;
-        font-weight: 600;
-      }
-      .hero button:hover {
-        background-color: #276b26;
-      }
-      .cards-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-        margin-top: 20px;
-      }
-      .card {
-        background-color: #fff;
-        flex: 1 1 300px;
-        min-width: 280px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        border-radius: 8px;
-      }
-      .card h2 {
-        margin-top: 0;
-        color: #2b772a;
-      }
-      .card p,
-      .card ul {
-        color: #555;
-        padding-left: 10px;
-      }
-      /* Footer */
-      footer {
-        text-align: center;
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-      }
-      footer p {
-        margin: 0;
-        color: #999;
-      }
-      /* Formulario de Insumos */
-      #insumos-form label {
-        display: block;
-        margin-bottom: 8px;
-      }
-      #insumos-form input {
-        width: 100px;
-      }
-      #insumos-form button {
-        margin-top: 10px;
-        background-color: #2b772a;
-        color: #fff;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      #insumos-form button:hover {
-        background-color: #276b26;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Encabezado -->
-    <header>
-      <div class="logo-container">
-        <!-- Asegúrate de tener la imagen en la carpeta correcta, por ejemplo: img/mi-logo.png -->
-        <img src="img/mi-logo.png" alt="The Healthy Box - Logo">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Healthy Box - Web Completa</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" 
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
+  <style>
+    /* Estilos generales */
+    body {
+      margin: 0;
+      font-family: "Open Sans", sans-serif;
+      background-color: #f6f8f9;
+      color: #333;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .logo-container img {
+      height: 50px;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 15px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+    }
+    .section-content {
+      display: none; /* Ocultamos todas; se mostrará la que corresponda */
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    /* Sección de Inicio (Hero + tarjetas) */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #e4f7e2;
+      padding: 50px 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #2b772a;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #555;
+    }
+    .hero button {
+      background-color: #2b772a;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .hero button:hover {
+      background-color: #276b26;
+    }
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .card {
+      background-color: #fff;
+      flex: 1 1 300px;
+      min-width: 280px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    .card h2 {
+      margin-top: 0;
+      color: #2b772a;
+    }
+    .card p, .card ul {
+      color: #555;
+      padding-left: 10px;
+    }
+    /* Formularios y tablas */
+    form {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    form label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input[type="text"],
+    input[type="number"] {
+      padding: 5px;
+      margin-left: 10px;
+    }
+    select {
+      padding: 5px;
+      margin-left: 10px;
+    }
+    button {
+      background-color: #2b772a;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    button:hover {
+      background-color: #276b26;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table th, table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    table th {
+      background-color: #eee;
+    }
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      margin-top: 30px;
+    }
+    footer p {
+      margin: 0;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado -->
+  <header>
+    <div class="logo-container">
+      <!-- Cambia "img/mi-logo.png" por la ruta de tu logo -->
+      <img src="img/mi-logo.png" alt="The Healthy Box - Logo">
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#" class="nav-link" data-section="inicio">Inicio</a></li>
+        <li><a href="#" class="nav-link" data-section="menu">Menú</a></li>
+        <li><a href="#" class="nav-link" data-section="pedidos">Pedidos</a></li>
+        <li><a href="#" class="nav-link" data-section="clientes">Clientes</a></li>
+        <li><a href="#" class="nav-link" data-section="insumos">Insumos</a></li>
+        <li><a href="#" class="nav-link" data-section="reportes">Reportes</a></li>
+        <li><a href="#" class="nav-link" data-section="salir">Salir</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- SECCIÓN: INICIO -->
+  <section id="seccion-inicio" class="section-content">
+    <div class="hero">
+      <h1>The Healthy Box</h1>
+      <p>Gestión completa para pedidos, ventas e inventario de comida saludable.</p>
+      <button id="btnMenuSemanal">Ver Menú Semanal</button>
+    </div>
+    <div class="cards-container">
+      <div class="card">
+        <h2>Ventas Recientes</h2>
+        <p id="ventas-hoy">Total de ventas hoy: $0</p>
+        <p id="ventas-semana">Resumen semanal: $0</p>
       </div>
-      <nav>
-        <ul>
-          <!-- Cada enlace tiene un atributo data-section para identificar la sección -->
-          <li><a href="#" class="nav-link" data-section="inicio">Inicio</a></li>
-          <li><a href="#" class="nav-link" data-section="menu">Menú</a></li>
-          <li><a href="#" class="nav-link" data-section="pedidos">Pedidos</a></li>
-          <li><a href="#" class="nav-link" data-section="clientes">Clientes</a></li>
-          <li><a href="#" class="nav-link" data-section="insumos">Insumos</a></li>
-          <li><a href="#" class="nav-link" data-section="reportes">Reportes</a></li>
-          <li><a href="#" class="nav-link" data-section="salir">Salir</a></li>
+      <div class="card">
+        <h2>Próximos Pedidos</h2>
+        <ul id="lista-proximos-pedidos">
+          <!-- Se poblará con JavaScript -->
         </ul>
-      </nav>
-    </header>
-
-    <!-- Sección de Inicio -->
-    <section id="seccion-inicio" class="section-content">
-      <div class="hero">
-        <h1>The Healthy Box</h1>
-        <p>Gestión completa para pedidos, ventas e inventario de comida saludable.</p>
-        <button id="btnMenuSemanal">Ver Menú Semanal</button>
       </div>
-      <div class="cards-container">
-        <div class="card">
-          <h2>Ventas Recientes</h2>
-          <p>Total de ventas hoy: $1,200</p>
-          <p>Resumen semanal: $8,450</p>
-        </div>
-        <div class="card">
-          <h2>Próximos Pedidos</h2>
-          <ul>
-            <li>Cliente 1: Entrega 12/04</li>
-            <li>Cliente 2: Entrega 13/04</li>
-            <li>Cliente 3: Entrega 14/04</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h2>Top Platos Vendidos</h2>
-          <p>1. Ensalada Detox</p>
-          <p>2. Pollo Grill con Quinoa</p>
-          <p>3. Smoothie Verde</p>
-        </div>
+      <div class="card">
+        <h2>Top Platos Vendidos</h2>
+        <ul id="top-platos">
+          <!-- Se poblará con JavaScript -->
+        </ul>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Sección Menú -->
-    <section id="seccion-menu" class="section-content">
-      <h2>Menú</h2>
-      <p>Aquí podrías mostrar el menú semanal o diario con imágenes, precios, etc.</p>
-    </section>
+  <!-- SECCIÓN: MENÚ -->
+  <section id="seccion-menu" class="section-content">
+    <h2>Menú</h2>
+    <p>Agrega los platos o edita los existentes.</p>
+    <form id="form-menu">
+      <label>
+        Nombre del Plato:
+        <input type="text" id="menu-nombre" required>
+      </label>
+      <label>
+        Precio:
+        <input type="number" id="menu-precio" required>
+      </label>
+      <label>
+        Descripción:
+        <input type="text" id="menu-descripcion">
+      </label>
+      <button type="submit">Agregar Plato</button>
+    </form>
+    <table id="tabla-menu">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filas generadas por JavaScript -->
+      </tbody>
+    </table>
+  </section>
 
-    <!-- Sección Pedidos -->
-    <section id="seccion-pedidos" class="section-content">
-      <h2>Pedidos</h2>
-      <p>Aquí podrías gestionar los pedidos, ver detalles, fechas de entrega, etc.</p>
-    </section>
+  <!-- SECCIÓN: PEDIDOS -->
+  <section id="seccion-pedidos" class="section-content">
+    <h2>Pedidos</h2>
+    <form id="form-pedidos">
+      <label>
+        Cliente:
+        <select id="pedido-cliente"></select>
+      </label>
+      <label>
+        Plato:
+        <select id="pedido-plato"></select>
+      </label>
+      <label>
+        Estado:
+        <select id="pedido-estado">
+          <option value="Pendiente">Pendiente</option>
+          <option value="En Proceso">En Proceso</option>
+          <option value="Entregado">Entregado</option>
+        </select>
+      </label>
+      <button type="submit">Agregar Pedido</button>
+    </form>
+    <table id="tabla-pedidos">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Plato</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filas generadas por JavaScript -->
+      </tbody>
+    </table>
+  </section>
 
-    <!-- Sección Clientes -->
-    <section id="seccion-clientes" class="section-content">
-      <h2>Clientes</h2>
-      <p>Aquí podrías listar y editar la información de tus clientes.</p>
-    </section>
+  <!-- SECCIÓN: CLIENTES -->
+  <section id="seccion-clientes" class="section-content">
+    <h2>Clientes</h2>
+    <form id="form-clientes">
+      <label>
+        Nombre:
+        <input type="text" id="cliente-nombre" required>
+      </label>
+      <label>
+        Teléfono:
+        <input type="text" id="cliente-telefono">
+      </label>
+      <label>
+        Dirección:
+        <input type="text" id="cliente-direccion">
+      </label>
+      <button type="submit">Agregar Cliente</button>
+    </form>
+    <table id="tabla-clientes">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filas generadas por JavaScript -->
+      </tbody>
+    </table>
+  </section>
 
-    <!-- Sección Insumos (con funcionalidad para sumar) -->
-    <section id="seccion-insumos" class="section-content">
-      <h2>Insumos</h2>
-      <p>Aquí puedes ingresar las cantidades de tus insumos y calcular el total.</p>
-      <form id="insumos-form">
-        <label>
-          Lechuga (unidades):
-          <input type="number" id="lechuga" value="15" min="0">
-        </label>
-        <label>
-          Pollo (kg):
-          <input type="number" id="pollo" value="3" min="0">
-        </label>
-        <label>
-          Atún (latas):
-          <input type="number" id="atun" value="10" min="0">
-        </label>
-        <button type="button" id="sumar-insumos">Sumar insumos</button>
-      </form>
-      <h3>Total de insumos: <span id="total-insumos">0</span></h3>
-    </section>
+  <!-- SECCIÓN: INSUMOS -->
+  <section id="seccion-insumos" class="section-content">
+    <h2>Insumos</h2>
+    <form id="form-insumos">
+      <label>
+        Nombre del Insumo:
+        <input type="text" id="insumo-nombre" required>
+      </label>
+      <label>
+        Cantidad:
+        <input type="number" id="insumo-cantidad" required>
+      </label>
+      <label>
+        Unidad:
+        <input type="text" id="insumo-unidad" placeholder="kg, latas, unidades..." required>
+      </label>
+      <button type="submit">Agregar Insumo</button>
+    </form>
+    <table id="tabla-insumos">
+      <thead>
+        <tr>
+          <th>Insumo</th>
+          <th>Cantidad</th>
+          <th>Unidad</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filas generadas por JavaScript -->
+      </tbody>
+    </table>
+  </section>
 
-    <!-- Sección Reportes -->
-    <section id="seccion-reportes" class="section-content">
-      <h2>Reportes</h2>
-      <p>Aquí se podrían visualizar gráficas y estadísticas de ventas, clientes, etc.</p>
-    </section>
+  <!-- SECCIÓN: REPORTES -->
+  <section id="seccion-reportes" class="section-content">
+    <h2>Reportes</h2>
+    <p>Resumen general de la información almacenada:</p>
+    <ul>
+      <li id="reporte-total-clientes">Total de clientes: 0</li>
+      <li id="reporte-total-menu">Total de platos en el menú: 0</li>
+      <li id="reporte-total-pedidos">Total de pedidos: 0</li>
+      <li id="reporte-total-insumos">Total de insumos: 0</li>
+    </ul>
+  </section>
 
-    <!-- Sección Salir -->
-    <section id="seccion-salir" class="section-content">
-      <h2>Salir</h2>
-      <p>Aquí podrías implementar un cierre de sesión o mostrar un mensaje.</p>
-    </section>
+  <!-- SECCIÓN: SALIR -->
+  <section id="seccion-salir" class="section-content">
+    <h2>Salir</h2>
+    <p>Si necesitas implementar un sistema de login y logout, deberás usar un backend o un servicio de autenticación.  
+    Por ahora, aquí simplemente mostramos un mensaje.</p>
+  </section>
 
-    <!-- Pie de página -->
-    <footer>
-      <p>&copy; 2025 The Healthy Box. Todos los derechos reservados.</p>
-    </footer>
+  <!-- Pie de página -->
+  <footer>
+    <p>&copy; 2025 The Healthy Box. Todos los derechos reservados.</p>
+  </footer>
 
-    <!-- JavaScript para navegación y suma de insumos -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const links = document.querySelectorAll(".nav-link");
-        const sections = document.querySelectorAll(".section-content");
+  <!-- JavaScript para Navegación y Manejo de Datos (Local Storage) -->
+  <script>
+    /********************************************************
+     *             ESTRUCTURAS DE DATOS EN LOCALSTORAGE
+     ********************************************************/
+    let menu = [];         // { id, nombre, precio, descripcion }
+    let clientes = [];     // { id, nombre, telefono, direccion }
+    let pedidos = [];      // { id, clienteId, platoId, estado }
+    let insumos = [];      // { id, nombre, cantidad, unidad }
 
-        // Mostrar la sección de "Inicio" por defecto
-        document.getElementById("seccion-inicio").style.display = "block";
+    // Generador de IDs simples
+    function generateId() {
+      return Date.now() + Math.floor(Math.random() * 1000);
+    }
 
-        // Navegación: mostrar la sección correspondiente al hacer clic en un enlace
-        links.forEach((link) => {
-          link.addEventListener("click", (event) => {
-            event.preventDefault();
-            const sectionToShow = link.getAttribute("data-section");
-            sections.forEach((sec) => (sec.style.display = "none"));
-            document.getElementById(`seccion-${sectionToShow}`).style.display = "block";
-          });
-        });
+    // Cargar datos desde Local Storage
+    function loadData() {
+      const menuData = localStorage.getItem("menu");
+      const clientesData = localStorage.getItem("clientes");
+      const pedidosData = localStorage.getItem("pedidos");
+      const insumosData = localStorage.getItem("insumos");
 
-        // Ejemplo: acción del botón "Ver Menú Semanal" en la sección de Inicio
-        document.getElementById("btnMenuSemanal").addEventListener("click", () => {
-          alert("Aquí se mostraría el menú semanal. Puedes personalizar esta parte.");
-        });
+      if (menuData) menu = JSON.parse(menuData);
+      if (clientesData) clientes = JSON.parse(clientesData);
+      if (pedidosData) pedidos = JSON.parse(pedidosData);
+      if (insumosData) insumos = JSON.parse(insumosData);
+    }
 
-        // Funcionalidad para sumar insumos
-        document.getElementById("sumar-insumos").addEventListener("click", () => {
-          const lechuga = parseFloat(document.getElementById("lechuga").value) || 0;
-          const pollo = parseFloat(document.getElementById("pollo").value) || 0;
-          const atun = parseFloat(document.getElementById("atun").value) || 0;
-          const total = lechuga + pollo + atun;
-          document.getElementById("total-insumos").innerText = total;
+    // Guardar datos en Local Storage
+    function saveData() {
+      localStorage.setItem("menu", JSON.stringify(menu));
+      localStorage.setItem("clientes", JSON.stringify(clientes));
+      localStorage.setItem("pedidos", JSON.stringify(pedidos));
+      localStorage.setItem("insumos", JSON.stringify(insumos));
+    }
+
+    /********************************************************
+     *                 RENDERIZADO DE SECCIONES
+     ********************************************************/
+
+    // ---- Menú ----
+    function renderMenu() {
+      const tbody = document.querySelector("#tabla-menu tbody");
+      tbody.innerHTML = ""; 
+      menu.forEach((plato) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${plato.nombre}</td>
+          <td>$${plato.precio}</td>
+          <td>${plato.descripcion || ""}</td>
+          <td>
+            <button onclick="eliminarPlato('${plato.id}')">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      // Actualizamos también el select de platos en Pedidos
+      const selectPlato = document.getElementById("pedido-plato");
+      selectPlato.innerHTML = "";
+      menu.forEach((plato) => {
+        const opt = document.createElement("option");
+        opt.value = plato.id;
+        opt.textContent = plato.nombre;
+        selectPlato.appendChild(opt);
+      });
+    }
+
+    function eliminarPlato(id) {
+      menu = menu.filter((p) => p.id !== id);
+      saveData();
+      renderMenu();
+      renderPedidos();
+    }
+
+    // ---- Pedidos ----
+    function renderPedidos() {
+      const tbody = document.querySelector("#tabla-pedidos tbody");
+      tbody.innerHTML = "";
+      pedidos.forEach((pedido) => {
+        const cliente = clientes.find((c) => c.id === pedido.clienteId);
+        const plato = menu.find((m) => m.id === pedido.platoId);
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${cliente ? cliente.nombre : "Cliente no encontrado"}</td>
+          <td>${plato ? plato.nombre : "Plato no encontrado"}</td>
+          <td>${pedido.estado}</td>
+          <td>
+            <button onclick="eliminarPedido('${pedido.id}')">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Lista de próximos pedidos en la sección de Inicio
+      const listaProximos = document.getElementById("lista-proximos-pedidos");
+      listaProximos.innerHTML = "";
+      // Muestra, por ejemplo, los 3 primeros pedidos pendientes
+      const pedidosPendientes = pedidos.filter((p) => p.estado !== "Entregado").slice(0, 3);
+      pedidosPendientes.forEach((p) => {
+        const cliente = clientes.find((c) => c.id === p.clienteId);
+        const li = document.createElement("li");
+        li.textContent = `${cliente ? cliente.nombre : "N/A"} - ${p.estado}`;
+        listaProximos.appendChild(li);
+      });
+    }
+
+    function eliminarPedido(id) {
+      pedidos = pedidos.filter((p) => p.id !== id);
+      saveData();
+      renderPedidos();
+      renderReportes();
+    }
+
+    // ---- Clientes ----
+    function renderClientes() {
+      const tbody = document.querySelector("#tabla-clientes tbody");
+      tbody.innerHTML = "";
+      clientes.forEach((cliente) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${cliente.nombre}</td>
+          <td>${cliente.telefono}</td>
+          <td>${cliente.direccion}</td>
+          <td>
+            <button onclick="eliminarCliente('${cliente.id}')">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Actualizamos el select de clientes en Pedidos
+      const selectCliente = document.getElementById("pedido-cliente");
+      selectCliente.innerHTML = "";
+      clientes.forEach((cliente) => {
+        const opt = document.createElement("option");
+        opt.value = cliente.id;
+        opt.textContent = cliente.nombre;
+        selectCliente.appendChild(opt);
+      });
+    }
+
+    function eliminarCliente(id) {
+      // Si existe un pedido con este cliente, habría que eliminarlo o reasignarlo.
+      // Por simplicidad, aquí solo impedimos la eliminación si hay pedidos asociados:
+      const tienePedidos = pedidos.some((p) => p.clienteId === id);
+      if(tienePedidos) {
+        alert("No se puede eliminar el cliente porque tiene pedidos asociados.");
+        return;
+      }
+      clientes = clientes.filter((c) => c.id !== id);
+      saveData();
+      renderClientes();
+    }
+
+    // ---- Insumos ----
+    function renderInsumos() {
+      const tbody = document.querySelector("#tabla-insumos tbody");
+      tbody.innerHTML = "";
+      insumos.forEach((insumo) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${insumo.nombre}</td>
+          <td>${insumo.cantidad}</td>
+          <td>${insumo.unidad}</td>
+          <td>
+            <button onclick="eliminarInsumo('${insumo.id}')">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function eliminarInsumo(id) {
+      insumos = insumos.filter((i) => i.id !== id);
+      saveData();
+      renderInsumos();
+    }
+
+    // ---- Reportes ----
+    function renderReportes() {
+      document.getElementById("reporte-total-clientes").textContent = `Total de clientes: ${clientes.length}`;
+      document.getElementById("reporte-total-menu").textContent = `Total de platos en el menú: ${menu.length}`;
+      document.getElementById("reporte-total-pedidos").textContent = `Total de pedidos: ${pedidos.length}`;
+      document.getElementById("reporte-total-insumos").textContent = `Total de insumos: ${insumos.length}`;
+
+      // Como ejemplo, supongamos que "Ventas Recientes" y "Resumen semanal"
+      // se calculan según la cantidad de pedidos con estado "Entregado" y el precio de cada plato.
+      const pedidosEntregados = pedidos.filter((p) => p.estado === "Entregado");
+      let totalVentas = 0;
+      pedidosEntregados.forEach((p) => {
+        const plato = menu.find((m) => m.id === p.platoId);
+        if(plato) totalVentas += parseFloat(plato.precio);
+      });
+      // Para simplificar, diremos que "Ventas hoy" es la sumatoria del día
+      // (no tenemos fecha en el ejemplo). Simplemente lo mostramos:
+      const ventasHoy = totalVentas; 
+      document.getElementById("ventas-hoy").textContent = `Total de ventas hoy: $${ventasHoy}`;
+      // "Resumen semanal" lo asumimos igual, pero podrías agregar un filtro por fecha:
+      document.getElementById("ventas-semana").textContent = `Resumen semanal: $${totalVentas}`;
+      // "Top platos vendidos" se basaría en cuántas veces aparece cada plato en pedidos "Entregado".
+      renderTopPlatos();
+    }
+
+    function renderTopPlatos() {
+      // Conteo de platos en pedidos entregados
+      const contador = {};
+      pedidos.forEach((p) => {
+        if(p.estado === "Entregado") {
+          if(!contador[p.platoId]) contador[p.platoId] = 0;
+          contador[p.platoId]++;
+        }
+      });
+      // Ordenar por más vendidos
+      const platosOrdenados = Object.entries(contador).sort((a,b) => b[1] - a[1]);
+      const topUl = document.getElementById("top-platos");
+      topUl.innerHTML = "";
+      platosOrdenados.slice(0, 3).forEach(([platoId, count]) => {
+        const plato = menu.find((m) => m.id === platoId);
+        if(plato) {
+          const li = document.createElement("li");
+          li.textContent = `${plato.nombre} (vendidos: ${count})`;
+          topUl.appendChild(li);
+        }
+      });
+    }
+
+    /********************************************************
+     *                 EVENTOS DEL DOCUMENTO
+     ********************************************************/
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Cargar datos de Local Storage
+      loadData();
+
+      // 2. Configurar navegación
+      const links = document.querySelectorAll(".nav-link");
+      const sections = document.querySelectorAll(".section-content");
+
+      // Mostrar por defecto la sección de Inicio
+      document.getElementById("seccion-inicio").style.display = "block";
+
+      links.forEach((link) => {
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          const sectionToShow = link.getAttribute("data-section");
+          // Ocultar todas las secciones
+          sections.forEach((sec) => (sec.style.display = "none"));
+          // Mostrar la sección requerida
+          document.getElementById(`seccion-${sectionToShow}`).style.display = "block";
+
+          // Renderizamos reportes si entramos a la sección "inicio" o "reportes"
+          if(sectionToShow === "inicio" || sectionToShow === "reportes") {
+            renderReportes();
+          }
         });
       });
-    </script>
-  </body>
+
+      // Botón Menú Semanal (demo)
+      document.getElementById("btnMenuSemanal").addEventListener("click", () => {
+        alert("Aquí podrías mostrar una vista detallada del menú semanal.");
+      });
+
+      // 3. Eventos de formularios
+
+      // Form Menú
+      document.getElementById("form-menu").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const nombre = document.getElementById("menu-nombre").value.trim();
+        const precio = parseFloat(document.getElementById("menu-precio").value) || 0;
+        const descripcion = document.getElementById("menu-descripcion").value.trim();
+
+        const nuevoPlato = { id: generateId().toString(), nombre, precio, descripcion };
+        menu.push(nuevoPlato);
+        saveData();
+        renderMenu();
+
+        // Limpiar formulario
+        e.target.reset();
+      });
+
+      // Form Pedidos
+      document.getElementById("form-pedidos").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const clienteId = document.getElementById("pedido-cliente").value;
+        const platoId = document.getElementById("pedido-plato").value;
+        const estado = document.getElementById("pedido-estado").value;
+
+        const nuevoPedido = { 
+          id: generateId().toString(),
+          clienteId,
+          platoId,
+          estado 
+        };
+        pedidos.push(nuevoPedido);
+        saveData();
+        renderPedidos();
+        renderReportes();
+
+        e.target.reset();
+      });
+
+      // Form Clientes
+      document.getElementById("form-clientes").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const nombre = document.getElementById("cliente-nombre").value.trim();
+        const telefono = document.getElementById("cliente-telefono").value.trim();
+        const direccion = document.getElementById("cliente-direccion").value.trim();
+
+        const nuevoCliente = {
+          id: generateId().toString(),
+          nombre,
+          telefono,
+          direccion
+        };
+        clientes.push(nuevoCliente);
+        saveData();
+        renderClientes();
+
+        e.target.reset();
+      });
+
+      // Form Insumos
+      document.getElementById("form-insumos").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const nombre = document.getElementById("insumo-nombre").value.trim();
+        const cantidad = parseFloat(document.getElementById("insumo-cantidad").value) || 0;
+        const unidad = document.getElementById("insumo-unidad").value.trim();
+
+        const nuevoInsumo = {
+          id: generateId().toString(),
+          nombre,
+          cantidad,
+          unidad
+        };
+        insumos.push(nuevoInsumo);
+        saveData();
+        renderInsumos();
+
+        e.target.reset();
+      });
+
+      // 4. Render inicial de cada sección
+      renderMenu();
+      renderClientes();
+      renderPedidos();
+      renderInsumos();
+      renderReportes(); // también actualiza las tarjetas de Inicio
+    });
+  </script>
+</body>
 </html>
