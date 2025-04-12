@@ -137,7 +137,7 @@
       <button type="submit">Agregar Cliente</button>
     </form>
     <table id="tablaClientes">
-      <thead><tr><th>Nombre</th><th>Email</th><th>Acciones</th></tr></thead>
+      <thead><tr><th>Nombre</th><th>Email</th><th>Acciones</th><th>Historial</th></tr></thead>
       <tbody></tbody>
     </table>
   </section>
@@ -186,6 +186,7 @@ let insumos = JSON.parse(localStorage.getItem('insumos')) || [];
 let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
 
 function actualizarClientes() {
+  const historialPedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
   const tbody = document.querySelector('#tablaClientes tbody');
   tbody.innerHTML = '';
   clientes.forEach((cliente, i) => {
@@ -193,6 +194,8 @@ function actualizarClientes() {
     tr.innerHTML = `
       <td>${cliente.nombre}</td>
       <td>${cliente.email}</td>
+      <td><button onclick="eliminarCliente(${i})">Eliminar</button></td>
+      <td>${obtenerHistorial(cliente.email, historialPedidos)}</td>
       <td><button onclick="eliminarCliente(${i})">Eliminar</button></td>
     `;
     tbody.appendChild(tr);
@@ -336,7 +339,7 @@ document.getElementById('formPedidos').addEventListener('submit', function(e) {
   e.preventDefault();
   const cliente = document.getElementById('pedidoCliente').value;
   const plato = document.getElementById('pedidoPlato').value;
-  pedidos.push({ cliente, plato });
+  pedidos.push({ cliente, plato, fecha: new Date().toISOString() });
   localStorage.setItem('pedidos', JSON.stringify(pedidos));
   actualizarPedidos();
   e.target.reset();
@@ -355,6 +358,15 @@ function actualizarPedidos() {
 if (localStorage.getItem('sesionActiva') === 'true') {
   iniciarSesion();
 }
+function obtenerHistorial(email, pedidos) {
+  const delCliente = pedidos.filter(p => p.cliente === email);
+  if (delCliente.length === 0) return 'Sin pedidos';
+  const fechas = delCliente.map(p => new Date(p.fecha || Date.now()));
+  const platos = delCliente.map(p => p.plato);
+  const ultimaFecha = fechas.sort((a, b) => b - a)[0];
+  return `Cantidad: ${delCliente.length}, Último: ${ultimaFecha.toLocaleDateString()}, Platos: ${[...new Set(platos)].join(', ')}`;
+}
+
 </script>
 
 </body>
