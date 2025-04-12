@@ -137,9 +137,52 @@
   </header>
 
   <main>
-    <!-- CONTENIDO -->
+    <section id="inicio" class="section active">
+      <h2>Bienvenido a The Healthy Box</h2>
+      <p>Usa el menú para comenzar a cargar información.</p>
+    </section>
+
+    <section id="menu" class="section">
+      <h2>Menú Semanal</h2>
+      <p>Próximamente podrás cargar aquí tus platos diarios.</p>
+    </section>
+
+    <section id="clientes" class="section">
+      <h2>Clientes</h2>
+      <p>Próximamente podrás cargar y gestionar tus clientes.</p>
+    </section>
+
+    <section id="insumos" class="section">
+      <h2>Insumos</h2>
+      <p>Próximamente podrás cargar tus insumos y cantidades.</p>
+    </section>
+
+    <section id="reportes" class="section">
+      <h2>Reportes</h2>
+      <p>Aquí se mostrarán estadísticas y resumenes de actividad.</p>
+    </section>
+
+    <section id="salir" class="section">
+      <h2>Sesión finalizada</h2>
+      <p>Gracias por usar la app. Puedes cerrar el navegador o volver a Inicio.</p>
+      <button onclick="mostrarSeccion('inicio')">Volver a Inicio</button>
+    </section>
   </main>
 
-  <!-- SCRIPTS -->
+  <script>
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = link.dataset.target;
+        mostrarSeccion(target);
+      });
+    });
+
+    function mostrarSeccion(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
 </body>
 </html>
