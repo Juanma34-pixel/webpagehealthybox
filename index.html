@@ -159,7 +159,171 @@
 </main>
 
 <script>
-// PEGÁ ACÁ TODO EL CÓDIGO JS QUE TENÉS EN EL CANVAS
+// Código de login, navegación y carga de secciones
+let usuarioActual = null;
+
+const links = document.querySelectorAll('.nav-link');
+links.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const destino = link.getAttribute('data-target');
+    document.querySelectorAll('main .section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(destino).classList.add('active');
+  });
+});
+
+let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+let insumos = JSON.parse(localStorage.getItem('insumos')) || [];
+
+function actualizarClientes() {
+  const tbody = document.querySelector('#tablaClientes tbody');
+  tbody.innerHTML = '';
+  clientes.forEach((cliente, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${cliente.nombre}</td>
+      <td>${cliente.email}</td>
+      <td><button onclick="eliminarCliente(${i})">Eliminar</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('totalClientes').textContent = clientes.length;
+}
+
+function eliminarCliente(index) {
+  clientes.splice(index, 1);
+  localStorage.setItem('clientes', JSON.stringify(clientes));
+  actualizarClientes();
+}
+
+document.getElementById('formClientes').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const nombre = document.getElementById('clienteNombre').value;
+  const email = document.getElementById('clienteEmail').value;
+  clientes.push({ nombre, email });
+  localStorage.setItem('clientes', JSON.stringify(clientes));
+  actualizarClientes();
+  e.target.reset();
+});
+
+function actualizarInsumos() {
+  const lista = document.getElementById('listaInsumos');
+  lista.innerHTML = '';
+  insumos.forEach((insumo, i) => {
+    const li = document.createElement('li');
+    li.textContent = `${insumo.nombre} (${insumo.cantidad})`;
+    lista.appendChild(li);
+  });
+  document.getElementById('totalInsumos').textContent = insumos.length;
+}
+
+document.getElementById('formInsumos').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const nombre = document.getElementById('insumoNombre').value;
+  const cantidad = document.getElementById('insumoCantidad').value;
+  insumos.push({ nombre, cantidad });
+  localStorage.setItem('insumos', JSON.stringify(insumos));
+  actualizarInsumos();
+  e.target.reset();
+});
+
+document.getElementById('formMenu').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const dia = document.getElementById('menuDia').value;
+  const plato = document.getElementById('menuPlato').value;
+  const item = document.createElement('li');
+  item.textContent = `${dia}: ${plato}`;
+  document.getElementById('listaMenu').appendChild(item);
+  e.target.reset();
+});
+
+function mostrarRegistro() {
+  document.getElementById('login').classList.remove('active');
+  document.getElementById('registro').classList.add('active');
+  document.getElementById('confirmacion').classList.remove('active');
+}
+
+function mostrarLogin() {
+  document.getElementById('login').classList.add('active');
+  document.getElementById('registro').classList.remove('active');
+  document.getElementById('confirmacion').classList.remove('active');
+}
+
+function mostrarConfirmacion() {
+  document.getElementById('confirmacion').classList.add('active');
+  document.getElementById('registro').classList.remove('active');
+  document.getElementById('login').classList.remove('active');
+}
+
+document.getElementById('registroForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const nombre = document.getElementById('registroNombre').value;
+  const email = document.getElementById('registroEmail').value;
+  const password = document.getElementById('registroPassword').value;
+  const codigo = Math.floor(100000 + Math.random() * 900000);
+  const usuario = { nombre, email, password, verificado: false, codigo };
+  localStorage.setItem('usuario', JSON.stringify(usuario));
+  alert('Tu código es: ' + codigo);
+  mostrarConfirmacion();
+});
+
+function verificarCodigo() {
+  const ingresado = document.getElementById('codigoVerificacion').value;
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  if (usuario && usuario.codigo == ingresado) {
+    usuario.verificado = true;
+    delete usuario.codigo;
+    localStorage.setItem('usuario', JSON.stringify(usuario));
+    alert('Cuenta verificada');
+    mostrarLogin();
+  } else {
+    alert('Código incorrecto');
+  }
+}
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  const recordarme = document.getElementById('recordarme').checked;
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  if (usuario && usuario.email === email && usuario.password === password) {
+    if (!usuario.verificado) {
+      alert('Falta confirmar código');
+      mostrarConfirmacion();
+    } else {
+      if (recordarme) localStorage.setItem('sesionActiva', 'true');
+      localStorage.setItem('usuarioActivo', JSON.stringify(usuario));
+      usuarioActual = usuario;
+      iniciarSesion();
+    }
+  } else {
+    alert('Datos incorrectos');
+  }
+});
+
+function iniciarSesion() {
+  usuarioActual = JSON.parse(localStorage.getItem('usuarioActivo'));
+  document.getElementById('login').classList.remove('active');
+  document.querySelector('header').style.display = 'flex';
+  document.querySelector('main').style.display = 'block';
+  document.getElementById('inicio').classList.add('active');
+  const bienvenida = document.createElement('p');
+  bienvenida.textContent = `¡Bienvenido/a, ${usuarioActual.nombre}!`;
+  document.getElementById('inicio').prepend(bienvenida);
+  actualizarClientes();
+  actualizarInsumos();
+}
+
+function cerrarSesion() {
+  localStorage.removeItem('usuarioActivo');
+  localStorage.removeItem('sesionActiva');
+  location.reload();
+}
+
+if (localStorage.getItem('sesionActiva') === 'true') {
+  iniciarSesion();
+}
 </script>
 
 </body>
