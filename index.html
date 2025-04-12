@@ -106,14 +106,8 @@
 <header style="display:none">
   <img src="img/milogo.jpg" alt="The Healthy Box">
   <nav>
-    <ul>
-      <li><a href="#" class="nav-link" data-target="inicio">Inicio</a></li>
-      <li><a href="#" class="nav-link" data-target="menu">Menú</a></li>
-      <li><a href="#" class="nav-link" data-target="clientes">Clientes</a></li>
-      <li><a href="#" class="nav-link" data-target="insumos">Insumos</a></li>
-      <li><a href="#" class="nav-link" data-target="reportes">Reportes</a></li>
-      <li><a href="#" onclick="cerrarSesion()">Salir</a></li>
-    </ul>
+    <ul>$1
+      <li><a href="#" class="nav-link" data-target="pedidos">Pedidos</a></li>
   </nav>
 </header>
 
@@ -151,7 +145,17 @@
     </form>
     <ul id="listaInsumos"></ul>
   </section>
-  <section id="reportes" class="section">
+  <section id="pedidos" class="section">
+  <h2>Pedidos</h2>
+  <form id="formPedidos">
+    <input type="text" id="pedidoCliente" placeholder="Cliente" required>
+    <input type="text" id="pedidoPlato" placeholder="Plato" required>
+    <button type="submit">Registrar Pedido</button>
+  </form>
+  <ul id="listaPedidos"></ul>
+</section>
+
+<section id="reportes" class="section">
     <h2>Reportes</h2>
     <p>Total clientes: <span id="totalClientes">0</span></p>
     <p>Total insumos: <span id="totalInsumos">0</span></p>
@@ -174,6 +178,7 @@ links.forEach(link => {
 
 let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
 let insumos = JSON.parse(localStorage.getItem('insumos')) || [];
+let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
 
 function actualizarClientes() {
   const tbody = document.querySelector('#tablaClientes tbody');
@@ -303,6 +308,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 });
 
 function iniciarSesion() {
+  actualizarPedidos();
   usuarioActual = JSON.parse(localStorage.getItem('usuarioActivo'));
   document.getElementById('login').classList.remove('active');
   document.querySelector('header').style.display = 'flex';
@@ -319,6 +325,26 @@ function cerrarSesion() {
   localStorage.removeItem('usuarioActivo');
   localStorage.removeItem('sesionActiva');
   location.reload();
+}
+
+document.getElementById('formPedidos').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const cliente = document.getElementById('pedidoCliente').value;
+  const plato = document.getElementById('pedidoPlato').value;
+  pedidos.push({ cliente, plato });
+  localStorage.setItem('pedidos', JSON.stringify(pedidos));
+  actualizarPedidos();
+  e.target.reset();
+});
+
+function actualizarPedidos() {
+  const lista = document.getElementById('listaPedidos');
+  lista.innerHTML = '';
+  pedidos.forEach((pedido, i) => {
+    const li = document.createElement('li');
+    li.textContent = `${pedido.cliente} pidió ${pedido.plato}`;
+    lista.appendChild(li);
+  });
 }
 
 if (localStorage.getItem('sesionActiva') === 'true') {
