@@ -4,13 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Healthy Box - Proyecto Final</title>
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" 
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
-
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
   <style>
-    /* ==================== VARIABLES Y RESET ==================== */
     :root {
       --main-green: #3a9639;
       --main-green-dark: #2f7c2f;
@@ -18,30 +14,20 @@
       --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
       --border-radius: 8px;
     }
-    * {
-      margin: 0; padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* ==================== BACKGROUND GENERAL ==================== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Open Sans', sans-serif;
       color: #333;
-      /* Fondo con imagen: Asegúrate que el archivo fondo1.png esté en la carpeta img */
       background: url("img/milogo.jpg") no-repeat center center fixed;
       background-size: cover;
       position: relative;
     }
-    /* Overlay semitransparente para mejorar legibilidad */
     body::before {
       content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: var(--bg-overlay);
       z-index: -1;
     }
-
-    /* ==================== ENCABEZADO ==================== */
     header {
       display: flex;
       align-items: center;
@@ -50,9 +36,7 @@
       background-color: var(--bg-overlay);
       box-shadow: var(--card-shadow);
     }
-    .logo-container img {
-      height: 50px;
-    }
+    .logo-container img { height: 50px; }
     nav ul {
       list-style: none;
       display: flex;
@@ -65,13 +49,9 @@
       font-weight: 600;
       transition: color 0.3s;
     }
-    nav a:hover {
-      color: var(--main-green-dark);
-    }
-
-    /* ==================== SECCIONES ==================== */
+    nav a:hover { color: var(--main-green-dark); }
     .section-content {
-      display: none; /* Sólo se muestra la sección activa mediante JavaScript */
+      display: none;
       max-width: 1200px;
       margin: 20px auto;
       background-color: var(--bg-overlay);
@@ -79,17 +59,11 @@
       border-radius: var(--border-radius);
       box-shadow: var(--card-shadow);
     }
-    .section-content h2 {
-      color: var(--main-green);
-      margin-bottom: 10px;
-    }
-
-    /* ==================== HERO / INICIO ==================== */
+    .section-content h2 { color: var(--main-green); margin-bottom: 10px; }
     .hero {
       text-align: center;
       padding: 40px 20px;
       border-radius: var(--border-radius);
-      /* Imagen de fondo de la hero: Asegúrate que fondo2.png esté en la carpeta img */
       background: url("img/milogo1.jpg") no-repeat center center;
       background-size: cover;
       position: relative;
@@ -107,16 +81,8 @@
       z-index: 1;
     }
     .hero h1, .hero p, .hero button {
-      position: relative; /* Para que se muestren sobre el overlay */
+      position: relative;
       z-index: 2;
-    }
-    .hero h1 {
-      font-size: 2.8rem;
-      margin-bottom: 15px;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
     }
     .hero button {
       background-color: var(--main-green);
@@ -127,149 +93,10 @@
       cursor: pointer;
       font-size: 1rem;
       font-weight: 600;
-      transition: background-color 0.3s;
     }
-    .hero button:hover {
-      background-color: var(--main-green-dark);
-    }
+    .hero button:hover { background-color: var(--main-green-dark); }
 
-    /* ==================== CARDS ==================== */
-    .cards-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-    }
-    .card {
-      background-color: var(--bg-overlay);
-      flex: 1 1 300px;
-      min-width: 280px;
-      padding: 20px;
-      box-shadow: var(--card-shadow);
-      border-radius: var(--border-radius);
-    }
-    .card h2 {
-      margin-top: 0;
-      color: var(--main-green);
-      margin-bottom: 8px;
-    }
-    .card p, .card ul {
-      color: #555;
-      padding-left: 10px;
-      margin-top: 5px;
-    }
-    .card ul {
-      list-style: square;
-    }
-
-    /* ==================== FORMULARIOS Y TABLAS ==================== */
-    .form-container {
-      background-color: var(--bg-overlay);
-      padding: 15px;
-      border-radius: var(--border-radius);
-      box-shadow: var(--card-shadow);
-      margin-bottom: 20px;
-    }
-    .form-container label {
-      display: block;
-      margin-bottom: 8px;
-    }
-    .form-container input,
-    .form-container select {
-      padding: 6px;
-      margin: 5px 0 10px 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 200px;
-    }
-    .form-container button {
-      background-color: var(--main-green);
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-      transition: background-color 0.3s;
-    }
-    .form-container button:hover {
-      background-color: var(--main-green-dark);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      background-color: var(--bg-overlay);
-      box-shadow: var(--card-shadow);
-      border-radius: var(--border-radius);
-      overflow: hidden;
-    }
-    table th, table td {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-      text-align: left;
-    }
-    table thead {
-      background-color: #e1f3df;
-    }
-    table tr:last-child td {
-      border-bottom: none;
-    }
-    table button {
-      margin: 0 5px;
-      padding: 4px 8px;
-      font-size: 0.8rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      background-color: #d9534f;
-      color: #fff;
-    }
-
-    /* ==================== SECCIÓN SALIR (FINALIZAR SESIÓN) ==================== */
-    .salida-container {
-      text-align: center;
-      padding: 30px;
-    }
-    .salida-container h2 {
-      font-size: 2rem;
-      color: var(--main-green);
-      margin-bottom: 15px;
-    }
-    .salida-container p {
-      font-size: 1.1rem;
-      margin-bottom: 20px;
-      color: #555;
-    }
-    .salida-container button {
-      background-color: var(--main-green);
-      color: #fff;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s;
-    }
-    .salida-container button:hover {
-      background-color: var(--main-green-dark);
-    }
-
-    /* ==================== FOOTER ==================== */
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: var(--bg-overlay);
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
-      margin-top: 30px;
-    }
-    footer p {
-      margin: 0;
-      color: #999;
-    }
-
-    /* ==================== MENÚ SEMANAL ==================== */
+    /* MENÚ SEMANAL */
     .menu-semanal-container {
       display: flex;
       margin-top: 20px;
@@ -279,10 +106,7 @@
       padding: 10px;
       border-right: 2px solid var(--main-green);
     }
-    .menu-semanal-sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
+    .menu-semanal-sidebar ul { list-style: none; padding: 0; }
     .menu-semanal-sidebar li {
       padding: 10px;
       margin-bottom: 5px;
@@ -292,7 +116,8 @@
       border: 1px solid var(--main-green);
       border-radius: var(--border-radius);
     }
-    .menu-semanal-sidebar li:hover, .menu-semanal-sidebar li.active {
+    .menu-semanal-sidebar li:hover,
+    .menu-semanal-sidebar li.active {
       background-color: var(--main-green);
       color: #fff;
     }
@@ -303,10 +128,8 @@
   </style>
 </head>
 <body>
-  <!-- ENCABEZADO -->
   <header>
     <div class="logo-container">
-      <!-- Asegúrate de tener el logo en img/milogo.jpg -->
       <img src="img/milogo.jpg" alt="The Healthy Box - Logo">
     </div>
     <nav>
@@ -322,7 +145,7 @@
     </nav>
   </header>
 
-  <!-- SECCIÓN: INICIO -->
+  <!-- INICIO -->
   <section id="seccion-inicio" class="section-content">
     <div class="hero">
       <h1>The Healthy Box</h1>
@@ -346,37 +169,7 @@
     </div>
   </section>
 
-  <!-- SECCIÓN: MENÚ -->
-  <section id="seccion-menu" class="section-content">
-    <h2>Menú</h2>
-    <div class="form-container">
-      <form id="form-menu">
-        <label>Nombre del Plato:
-          <input type="text" id="menu-nombre" required>
-        </label>
-        <label>Precio:
-          <input type="number" id="menu-precio" min="0" required>
-        </label>
-        <label>Descripción:
-          <input type="text" id="menu-descripcion">
-        </label>
-        <button type="submit">Agregar Plato</button>
-      </form>
-    </div>
-    <table id="tabla-menu">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Precio</th>
-          <th>Descripción</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
-
-  <!-- SECCIÓN: MENÚ SEMANAL -->
+  <!-- MENÚ SEMANAL -->
   <section id="seccion-menu-semanal" class="section-content">
     <h2>Menú Semanal</h2>
     <div class="menu-semanal-container">
@@ -397,18 +190,38 @@
     </div>
   </section>
 
-  <!-- SECCIÓN: PEDIDOS -->
-  <section id="seccion-pedidos" class="section-content">
-    <h2>Pedidos</h2>
-    <div class="form-container">
-      <form id="form-pedidos">
-        <label>Cliente:
-          <select id="pedido-cliente"></select>
-        </label>
-        <label>Plato:
-          <select id="pedido-plato"></select>
-        </label>
-        <label>Estado:
-          <select id="pedido-estado">
-            <option value="Pendiente">Pendiente</option>
-            <option value="En Proceso">
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const links = document.querySelectorAll(".nav-link");
+      const sections = document.querySelectorAll(".section-content");
+      document.getElementById("seccion-inicio").style.display = "block";
+
+      links.forEach(link => {
+        link.addEventListener("click", e => {
+          e.preventDefault();
+          const sectionToShow = link.getAttribute("data-section");
+          sections.forEach(sec => sec.style.display = "none");
+          document.getElementById(`seccion-${sectionToShow}`).style.display = "block";
+        });
+      });
+
+      document.getElementById("btnMenuSemanal").addEventListener("click", () => {
+        sections.forEach(sec => sec.style.display = "none");
+        document.getElementById("seccion-menu-semanal").style.display = "block";
+      });
+
+      const dias = document.querySelectorAll('.menu-semanal-sidebar li');
+      const contenidoDia = document.querySelector('.menu-semanal-content');
+
+      dias.forEach(dia => {
+        dia.addEventListener('click', () => {
+          dias.forEach(d => d.classList.remove('active'));
+          dia.classList.add('active');
+          const nombreDia = dia.textContent;
+          contenidoDia.innerHTML = `<h3>Menú del ${nombreDia}</h3><p>Aquí podés cargar el menú manualmente.</p>`;
+        });
+      });
+    });
+  </script>
+</body>
+</html>
