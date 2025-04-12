@@ -175,6 +175,7 @@
     .form-container button:hover {
       background-color: var(--main-green-dark);
     }
+
   </style>
 </head>
 <body>
@@ -228,16 +229,36 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      const links = document.querySelectorAll(".nav-link");
+      const sections = document.querySelectorAll(".section-content");
+      const btnMenuSemanal = document.getElementById("btnMenuSemanal");
+
+      // Mostrar la sección correcta al hacer clic en las solapas
+      links.forEach(link => {
+        link.addEventListener("click", e => {
+          e.preventDefault();
+          const sectionToShow = link.getAttribute("data-section");
+          sections.forEach(sec => sec.style.display = "none");
+          document.getElementById(`seccion-${sectionToShow}`).style.display = "block";
+        });
+      });
+
+      // Botón para ver el menú semanal
+      btnMenuSemanal.addEventListener("click", () => {
+        sections.forEach(sec => sec.style.display = "none");
+        document.getElementById("seccion-menu-semanal").style.display = "block";
+      });
+
+      // Funcionalidad para el menú semanal
       const dias = document.querySelectorAll('.menu-semanal-sidebar li');
       const contenidoDia = document.querySelector('.menu-semanal-content');
-      
+
       dias.forEach(dia => {
         dia.addEventListener('click', () => {
           dias.forEach(d => d.classList.remove('active'));
           dia.classList.add('active');
           const nombreDia = dia.textContent;
 
-          // Crear formulario para cargar el menú del día
           contenidoDia.innerHTML = `
             <h3>Menú del ${nombreDia}</h3>
             <form id="form-menu-${nombreDia}">
