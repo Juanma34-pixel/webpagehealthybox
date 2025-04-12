@@ -6,16 +6,70 @@
   <title>The Healthy Box</title>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Open Sans', sans-serif; margin: 0; padding: 0; background: #f8f8f8; }
-    header, main, section { padding: 20px; }
-    .section { display: none; }
-    .section.active { display: block; background: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    form input, form button { display: block; margin: 10px 0; padding: 8px; width: 100%; max-width: 300px; }
-    nav ul { list-style: none; padding: 0; display: flex; gap: 15px; }
+    body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('img/milogo1.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+    header, main, section {
+      padding: 20px;
+    }
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+      background: rgba(255,255,255,0.95);
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 900px;
+      margin: 30px auto;
+    }
+    form input, form button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
     nav ul li { display: inline; }
-    nav a { text-decoration: none; color: green; font-weight: bold; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { padding: 10px; border: 1px solid #ccc; }
+    nav a {
+      text-decoration: none;
+      color: #3a9639;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: rgba(255,255,255,0.9);
+      padding: 10px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    header img {
+      height: 50px;
+    }
   </style>
 </head>
 <body>
@@ -50,7 +104,7 @@
 </section>
 
 <header style="display:none">
-  <h1>The Healthy Box</h1>
+  <img src="img/milogo.jpg" alt="The Healthy Box">
   <nav>
     <ul>
       <li><a href="#" class="nav-link" data-target="inicio">Inicio</a></li>
