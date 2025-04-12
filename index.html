@@ -1,273 +1,165 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Healthy Box</title>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --verde-principal: #3a9639;
-      --verde-oscuro: #2f7c2f;
-      --fondo-claro: rgba(255,255,255,0.9);
-      --borde-radius: 10px;
-    }
-    body {
-      font-family: 'Open Sans', sans-serif;
-      margin: 0;
-      background: url('img/milogo1.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #333;
-    }
-    header, main {
-      display: none;
-    }
-    .section {
-      display: none;
-      background-color: var(--fondo-claro);
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: var(--borde-radius);
-      max-width: 1200px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .active {
-      display: block !important;
-    }
-    header {
-      background-color: var(--fondo-claro);
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 20px;
-    }
-    header img {
-      height: 50px;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
-    }
-    nav a {
-      text-decoration: none;
-      font-weight: 600;
-      color: var(--verde-principal);
-    }
-    nav a:hover {
-      color: var(--verde-oscuro);
-    }
-    input, button {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: var(--verde-principal);
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: var(--verde-oscuro);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ccc;
-      text-align: left;
-    }
-  </style>
-</head>
-<body>
-  <section id="login" class="section active">
-    <h2>Iniciar Sesión</h2>
-    <form id="loginForm">
-      <label>Email:<br><input type="email" id="loginEmail" required></label><br>
-      <label>Contraseña:<br><input type="password" id="loginPassword" required></label><br>
-      <label><input type="checkbox" id="recordarme"> Recordarme</label><br>
-      <button type="submit">Entrar</button>
-    </form>
-    <p>¿No tenés cuenta? <a href="#" onclick="mostrarRegistro()">Registrarse</a></p>
-  </section>
+// Código de login, verificación y navegación de secciones
+let usuarioActual = null;
 
-  <section id="registro" class="section">
-    <h2>Registrarse</h2>
-    <form id="registroForm">
-      <label>Nombre completo:<br><input type="text" id="registroNombre" required></label><br>
-      <label>Email:<br><input type="email" id="registroEmail" required></label><br>
-      <label>Contraseña:<br><input type="password" id="registroPassword" required></label><br>
-      <button type="submit">Crear Cuenta</button>
-    </form>
-    <p>¿Ya tenés cuenta? <a href="#" onclick="mostrarLogin()">Iniciar sesión</a></p>
-  </section>
+const links = document.querySelectorAll('.nav-link');
+links.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const destino = link.getAttribute('data-target');
+    document.querySelectorAll('main .section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(destino).classList.add('active');
+  });
+});
 
-  <section id="confirmacion" class="section">
-    <h2>Verificación de correo</h2>
-    <p>Te enviamos un código de verificación. Ingresalo aquí:</p>
-    <input type="text" id="codigoVerificacion" placeholder="Código de verificación">
-    <button onclick="verificarCodigo()">Confirmar</button>
-  </section>
+let clientes = JSON.parse(localStorage.getItem('clientes')) || [];
+let insumos = JSON.parse(localStorage.getItem('insumos')) || [];
 
-  <header>
-    <img src="img/milogo.jpg" alt="Logo">
-    <nav>
-      <ul>
-        <li><a href="#" class="nav-link" data-target="inicio">Inicio</a></li>
-        <li><a href="#" class="nav-link" data-target="menu">Menú</a></li>
-        <li><a href="#" class="nav-link" data-target="clientes">Clientes</a></li>
-        <li><a href="#" class="nav-link" data-target="insumos">Insumos</a></li>
-        <li><a href="#" class="nav-link" data-target="reportes">Reportes</a></li>
-        <li><a href="#" onclick="cerrarSesion()">Cerrar sesión</a></li>
-      </ul>
-    </nav>
-  </header>
+function actualizarClientes() {
+  const tbody = document.querySelector('#tablaClientes tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  clientes.forEach((cliente, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${cliente.nombre}</td>
+      <td>${cliente.email}</td>
+      <td><button onclick="eliminarCliente(${i})">Eliminar</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  const totalClientes = document.getElementById('totalClientes');
+  if (totalClientes) totalClientes.textContent = clientes.length;
+}
 
-  <main>
-    <section id="inicio" class="section">
-      <h2>Bienvenido/a</h2>
-    </section>
-    <section id="menu" class="section">
-      <h2>Menú Semanal</h2>
-      <form id="formMenu">
-        <label>Día:<br><input type="text" id="menuDia" required></label><br>
-        <label>Plato:<br><input type="text" id="menuPlato" required></label><br>
-        <button type="submit">Agregar al menú</button>
-      </form>
-      <ul id="listaMenu"></ul>
-    </section>
-    <section id="clientes" class="section">
-      <h2>Clientes</h2>
-      <form id="formClientes">
-        <label>Nombre:<br><input type="text" id="clienteNombre" required></label><br>
-        <label>Email:<br><input type="email" id="clienteEmail" required></label><br>
-        <button type="submit">Agregar Cliente</button>
-      </form>
-      <table id="tablaClientes">
-        <thead>
-          <tr><th>Nombre</th><th>Email</th><th>Acciones</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
-    <section id="insumos" class="section">
-      <h2>Insumos</h2>
-      <form id="formInsumos">
-        <label>Nombre:<br><input type="text" id="insumoNombre" required></label><br>
-        <label>Cantidad:<br><input type="number" id="insumoCantidad" required></label><br>
-        <button type="submit">Agregar Insumo</button>
-      </form>
-      <ul id="listaInsumos"></ul>
-    </section>
-    <section id="reportes" class="section">
-      <h2>Reportes</h2>
-      <p>Total clientes: <span id="totalClientes">0</span></p>
-      <p>Total insumos: <span id="totalInsumos">0</span></p>
-    </section>
-  </main>
+function eliminarCliente(index) {
+  clientes.splice(index, 1);
+  localStorage.setItem('clientes', JSON.stringify(clientes));
+  actualizarClientes();
+}
 
-  <script>
-    // Código de login, verificación y navegación de secciones
-    let usuarioActual = null;
+const formClientes = document.getElementById('formClientes');
+if (formClientes) {
+  formClientes.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('clienteNombre').value;
+    const email = document.getElementById('clienteEmail').value;
+    clientes.push({ nombre, email });
+    localStorage.setItem('clientes', JSON.stringify(clientes));
+    actualizarClientes();
+    formClientes.reset();
+  });
+}
 
-    const links = document.querySelectorAll('.nav-link');
-    links.forEach(link => {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        const destino = link.getAttribute('data-target');
-        document.querySelectorAll('main .section').forEach(sec => sec.classList.remove('active'));
-        document.getElementById(destino).classList.add('active');
-      });
-    });
+function actualizarInsumos() {
+  const lista = document.getElementById('listaInsumos');
+  if (!lista) return;
+  lista.innerHTML = '';
+  insumos.forEach((insumo, i) => {
+    const li = document.createElement('li');
+    li.textContent = `${insumo.nombre} (${insumo.cantidad})`;
+    lista.appendChild(li);
+  });
+  const totalInsumos = document.getElementById('totalInsumos');
+  if (totalInsumos) totalInsumos.textContent = insumos.length;
+}
 
-    function mostrarRegistro() {
-      document.getElementById('login').classList.remove('active');
-      document.getElementById('registro').classList.add('active');
-      document.getElementById('confirmacion').classList.remove('active');
-    }
+const formInsumos = document.getElementById('formInsumos');
+if (formInsumos) {
+  formInsumos.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('insumoNombre').value;
+    const cantidad = document.getElementById('insumoCantidad').value;
+    insumos.push({ nombre, cantidad });
+    localStorage.setItem('insumos', JSON.stringify(insumos));
+    actualizarInsumos();
+    formInsumos.reset();
+  });
+}
 
-    function mostrarLogin() {
-      document.getElementById('login').classList.add('active');
-      document.getElementById('registro').classList.remove('active');
-      document.getElementById('confirmacion').classList.remove('active');
-    }
+function mostrarRegistro() {
+  document.getElementById('login').classList.remove('active');
+  document.getElementById('registro').classList.add('active');
+  document.getElementById('confirmacion').classList.remove('active');
+}
 
-    function mostrarConfirmacion() {
-      document.getElementById('confirmacion').classList.add('active');
-      document.getElementById('registro').classList.remove('active');
-      document.getElementById('login').classList.remove('active');
-    }
+function mostrarLogin() {
+  document.getElementById('login').classList.add('active');
+  document.getElementById('registro').classList.remove('active');
+  document.getElementById('confirmacion').classList.remove('active');
+}
 
-    function verificarCodigo() {
-      const ingresado = document.getElementById('codigoVerificacion').value;
-      const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
-      if (usuarioGuardado && usuarioGuardado.codigo === ingresado) {
-        usuarioGuardado.verificado = true;
-        delete usuarioGuardado.codigo;
-        localStorage.setItem('usuario', JSON.stringify(usuarioGuardado));
-        alert('Cuenta verificada');
-        mostrarLogin();
-      } else {
-        alert('Código incorrecto');
-      }
-    }
+function mostrarConfirmacion() {
+  document.getElementById('confirmacion').classList.add('active');
+  document.getElementById('registro').classList.remove('active');
+  document.getElementById('login').classList.remove('active');
+}
 
-    document.getElementById('registroForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const nombre = document.getElementById('registroNombre').value;
-      const email = document.getElementById('registroEmail').value;
-      const password = document.getElementById('registroPassword').value;
-      const codigo = Math.floor(100000 + Math.random() * 900000);
-      const usuario = { nombre, email, password, verificado: false, codigo };
-      localStorage.setItem('usuario', JSON.stringify(usuario));
-      alert('Tu código es: ' + codigo);
+function verificarCodigo() {
+  const ingresado = document.getElementById('codigoVerificacion').value;
+  const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
+  if (usuarioGuardado && usuarioGuardado.codigo === ingresado) {
+    usuarioGuardado.verificado = true;
+    delete usuarioGuardado.codigo;
+    localStorage.setItem('usuario', JSON.stringify(usuarioGuardado));
+    alert('Cuenta verificada');
+    mostrarLogin();
+  } else {
+    alert('Código incorrecto');
+  }
+}
+
+document.getElementById('registroForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const nombre = document.getElementById('registroNombre').value;
+  const email = document.getElementById('registroEmail').value;
+  const password = document.getElementById('registroPassword').value;
+  const codigo = Math.floor(100000 + Math.random() * 900000);
+  const usuario = { nombre, email, password, verificado: false, codigo };
+  localStorage.setItem('usuario', JSON.stringify(usuario));
+  alert('Tu código es: ' + codigo);
+  mostrarConfirmacion();
+});
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  const recordarme = document.getElementById('recordarme').checked;
+  const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
+  if (usuarioGuardado && usuarioGuardado.email === email && usuarioGuardado.password === password) {
+    if (!usuarioGuardado.verificado) {
+      alert('Falta confirmar código');
       mostrarConfirmacion();
-    });
-
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      const recordarme = document.getElementById('recordarme').checked;
-      const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
-      if (usuarioGuardado && usuarioGuardado.email === email && usuarioGuardado.password === password) {
-        if (!usuarioGuardado.verificado) {
-          alert('Falta confirmar código');
-          mostrarConfirmacion();
-        } else {
-          if (recordarme) localStorage.setItem('sesionActiva', 'true');
-          localStorage.setItem('usuarioActivo', JSON.stringify(usuarioGuardado));
-          usuarioActual = usuarioGuardado;
-          iniciarSesion();
-        }
-      } else {
-        alert('Datos incorrectos');
-      }
-    });
-
-    function iniciarSesion() {
-      usuarioActual = JSON.parse(localStorage.getItem('usuarioActivo'));
-      document.getElementById('login').classList.remove('active');
-      document.querySelector('header').style.display = 'flex';
-      document.querySelector('main').style.display = 'block';
-      document.getElementById('inicio').classList.add('active');
-      const bienvenida = document.createElement('p');
-      bienvenida.textContent = `¡Bienvenido/a, ${usuarioActual.nombre}!`;
-      document.getElementById('inicio').prepend(bienvenida);
-    }
-
-    function cerrarSesion() {
-      localStorage.removeItem('usuarioActivo');
-      localStorage.removeItem('sesionActiva');
-      location.reload();
-    }
-
-    if (localStorage.getItem('sesionActiva') === 'true') {
+    } else {
+      if (recordarme) localStorage.setItem('sesionActiva', 'true');
+      localStorage.setItem('usuarioActivo', JSON.stringify(usuarioGuardado));
+      usuarioActual = usuarioGuardado;
       iniciarSesion();
     }
-  </script>
-</body>
-</html>
+  } else {
+    alert('Datos incorrectos');
+  }
+});
+
+function iniciarSesion() {
+  usuarioActual = JSON.parse(localStorage.getItem('usuarioActivo'));
+  document.getElementById('login').classList.remove('active');
+  document.querySelector('header').style.display = 'flex';
+  document.querySelector('main').style.display = 'block';
+  document.getElementById('inicio').classList.add('active');
+  const bienvenida = document.createElement('p');
+  bienvenida.textContent = `¡Bienvenido/a, ${usuarioActual.nombre}!`;
+  document.getElementById('inicio').prepend(bienvenida);
+  actualizarClientes();
+  actualizarInsumos();
+}
+
+function cerrarSesion() {
+  localStorage.removeItem('usuarioActivo');
+  localStorage.removeItem('sesionActiva');
+  location.reload();
+}
+
+if (localStorage.getItem('sesionActiva') === 'true') {
+  iniciarSesion();
+}
