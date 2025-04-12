@@ -18,18 +18,18 @@
       --border-radius: 8px;
     }
     * {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'Open Sans', sans-serif;
       color: #333;
+      /* Fondo con imagen, asegúrate que img/milogo.jpg exista */
       background: url("img/milogo.jpg") no-repeat center center fixed;
       background-size: cover;
       position: relative;
     }
-
     body::before {
       content: "";
       position: fixed;
@@ -37,7 +37,7 @@
       background: var(--bg-overlay);
       z-index: -1;
     }
-
+    /* ENCABEZADO */
     header {
       display: flex;
       align-items: center;
@@ -46,29 +46,25 @@
       background-color: var(--bg-overlay);
       box-shadow: var(--card-shadow);
     }
-
     .logo-container img {
       height: 50px;
     }
-
     nav ul {
       list-style: none;
       display: flex;
       gap: 15px;
       align-items: center;
     }
-
     nav a {
       text-decoration: none;
       color: var(--main-green);
       font-weight: 600;
       transition: color 0.3s;
     }
-
     nav a:hover {
       color: var(--main-green-dark);
     }
-
+    /* SECCIONES */
     .section-content {
       display: none;
       max-width: 1200px;
@@ -78,11 +74,12 @@
       border-radius: var(--border-radius);
       box-shadow: var(--card-shadow);
     }
-
+    /* SECCIÓN: INICIO (Hero) */
     .hero {
       text-align: center;
       padding: 40px 20px;
       border-radius: var(--border-radius);
+      /* Imagen de fondo para el hero (ajusta img/milogo1.jpg si deseas) */
       background: url("img/milogo1.jpg") no-repeat center center;
       background-size: cover;
       position: relative;
@@ -90,7 +87,6 @@
       margin-bottom: 20px;
       color: #fff;
     }
-
     .hero::after {
       content: "";
       position: absolute;
@@ -100,17 +96,18 @@
       border-radius: var(--border-radius);
       z-index: 1;
     }
-
+    .hero h1, .hero p, .hero button {
+      position: relative;
+      z-index: 2;
+    }
     .hero h1 {
       font-size: 2.8rem;
       margin-bottom: 15px;
     }
-
     .hero p {
       font-size: 1.2rem;
       margin-bottom: 20px;
     }
-
     .hero button {
       background-color: var(--main-green);
       color: #fff;
@@ -122,93 +119,24 @@
       font-weight: 600;
       transition: background-color 0.3s;
     }
-
     .hero button:hover {
       background-color: var(--main-green-dark);
     }
-
-    /* ==================== MENÚ SEMANAL ==================== */
-    .menu-semanal-container {
-      display: flex;
-      margin-top: 20px;
-    }
-
-    .menu-semanal-sidebar {
-      width: 200px;
-      padding: 10px;
-      border-right: 2px solid var(--main-green);
-    }
-
-    .menu-semanal-sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .menu-semanal-sidebar li {
-      padding: 10px;
-      margin-bottom: 5px;
-      cursor: pointer;
+    /* CONTENIDO DE SOLAPAS (placeholder) */
+    .placeholder {
       text-align: center;
-      color: var(--main-green);
-      border: 1px solid var(--main-green);
-      border-radius: var(--border-radius);
+      font-size: 1.2rem;
+      padding: 40px 20px;
     }
-
-    .menu-semanal-sidebar li:hover,
-    .menu-semanal-sidebar li.active {
-      background-color: var(--main-green);
-      color: #fff;
-    }
-
-    .menu-semanal-content {
-      flex: 1;
-      padding: 10px;
-    }
-
-    .form-container {
-      background-color: var(--bg-overlay);
-      padding: 15px;
-      border-radius: var(--border-radius);
-      box-shadow: var(--card-shadow);
-      margin-bottom: 20px;
-    }
-
-    .form-container label {
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .form-container input,
-    .form-container select {
-      padding: 6px;
-      margin: 5px 0 10px 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 200px;
-    }
-
-    .form-container button {
-      background-color: var(--main-green);
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-      transition: background-color 0.3s;
-    }
-
-    .form-container button:hover {
-      background-color: var(--main-green-dark);
-    }
-
+    /* Ejemplo básico para solapas adicionales */
+    /* Puedes personalizar cada sección según tus necesidades */
   </style>
 </head>
 <body>
   <!-- ENCABEZADO -->
   <header>
     <div class="logo-container">
+      <!-- Logo, asegúrate de tener img/milogo.jpg -->
       <img src="img/milogo.jpg" alt="The Healthy Box - Logo">
     </div>
     <nav>
@@ -231,93 +159,111 @@
       <p>Gestión completa para pedidos, ventas e inventario de comida saludable.</p>
       <button id="btnMenuSemanal">Ver Menú Semanal</button>
     </div>
+    <div class="placeholder">
+      <p>Bienvenido al panel de control de The Healthy Box.</p>
+    </div>
   </section>
 
-  <!-- SECCIÓN: MENÚ SEMANAL -->
-  <section id="seccion-menu-semanal" class="section-content">
-    <h2>Menú Semanal</h2>
-    <div class="menu-semanal-container">
-      <aside class="menu-semanal-sidebar">
-        <ul>
-          <li data-dia="lunes">Lunes</li>
-          <li data-dia="martes">Martes</li>
-          <li data-dia="miercoles">Miércoles</li>
-          <li data-dia="jueves">Jueves</li>
-          <li data-dia="viernes">Viernes</li>
-          <li data-dia="sabado">Sábado</li>
-          <li data-dia="domingo">Domingo</li>
-        </ul>
-      </aside>
-      <div class="menu-semanal-content">
-        <p>Seleccione un día para ver el menú.</p>
-      </div>
+  <!-- SECCIÓN: MENÚ -->
+  <section id="seccion-menu" class="section-content">
+    <div class="placeholder">
+      <h2>Menú</h2>
+      <p>Aquí se mostrarán los platos y se podrá gestionar el menú.</p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: PEDIDOS -->
+  <section id="seccion-pedidos" class="section-content">
+    <div class="placeholder">
+      <h2>Pedidos</h2>
+      <p>Aquí podrás ver y gestionar los pedidos realizados.</p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: CLIENTES -->
+  <section id="seccion-clientes" class="section-content">
+    <div class="placeholder">
+      <h2>Clientes</h2>
+      <p>Aquí se mostrará la lista de clientes y se podrán agregar nuevos registros.</p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: INSUMOS -->
+  <section id="seccion-insumos" class="section-content">
+    <div class="placeholder">
+      <h2>Insumos</h2>
+      <p>Aquí se gestionarán los insumos y el stock disponible.</p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: REPORTES -->
+  <section id="seccion-reportes" class="section-content">
+    <div class="placeholder">
+      <h2>Reportes</h2>
+      <p>Visualiza estadísticas y reportes del funcionamiento diario.</p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: SALIR -->
+  <section id="seccion-salir" class="section-content">
+    <div class="placeholder">
+      <h2>¡Hasta pronto!</h2>
+      <p id="mensaje-salida"></p>
+      <button id="btnEntrarSesion">Entrar a sesión</button>
     </div>
   </section>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // Seleccionar enlaces de navegación y secciones
       const links = document.querySelectorAll(".nav-link");
       const sections = document.querySelectorAll(".section-content");
-      const btnMenuSemanal = document.getElementById("btnMenuSemanal");
+      // Mostrar la sección "Inicio" por defecto
+      document.getElementById("seccion-inicio").style.display = "block";
 
-      // Mostrar la sección correcta al hacer clic en las solapas
+      // Configurar la navegación para que muestre la sección correspondiente
       links.forEach(link => {
         link.addEventListener("click", e => {
           e.preventDefault();
           const sectionToShow = link.getAttribute("data-section");
           sections.forEach(sec => sec.style.display = "none");
-          document.getElementById(`seccion-${sectionToShow}`).style.display = "block";
+          const targetSection = document.getElementById(`seccion-${sectionToShow}`);
+          if(targetSection) {
+            targetSection.style.display = "block";
+          } else {
+            alert("La sección solicitada no existe.");
+          }
         });
       });
 
-      // Botón para ver el menú semanal
+      // Botón para ver el menú semanal (dentro de la sección Inicio)
+      const btnMenuSemanal = document.getElementById("btnMenuSemanal");
       btnMenuSemanal.addEventListener("click", () => {
         sections.forEach(sec => sec.style.display = "none");
-        document.getElementById("seccion-menu-semanal").style.display = "block";
+        document.getElementById("seccion-menu").style.display = "block";
       });
 
-      // Funcionalidad para el menú semanal
-      const dias = document.querySelectorAll('.menu-semanal-sidebar li');
-      const contenidoDia = document.querySelector('.menu-semanal-content');
-
-      dias.forEach(dia => {
-        dia.addEventListener('click', () => {
-          dias.forEach(d => d.classList.remove('active'));
-          dia.classList.add('active');
-          const nombreDia = dia.textContent;
-
-          contenidoDia.innerHTML = `
-            <h3>Menú del ${nombreDia}</h3>
-            <form id="form-menu-${nombreDia}">
-              <label>Nombre del Plato:
-                <input type="text" id="menu-nombre-${nombreDia}" required>
-              </label>
-              <label>Precio:
-                <input type="number" id="menu-precio-${nombreDia}" min="0" required>
-              </label>
-              <label>Descripción:
-                <input type="text" id="menu-descripcion-${nombreDia}">
-              </label>
-              <button type="submit">Guardar Menú</button>
-            </form>
-          `;
-
-          // Añadir el evento de submit para el formulario
-          const form = document.getElementById(`form-menu-${nombreDia}`);
-          form.addEventListener("submit", function(e) {
-            e.preventDefault();
-            const nombre = document.getElementById(`menu-nombre-${nombreDia}`).value;
-            const precio = parseFloat(document.getElementById(`menu-precio-${nombreDia}`).value);
-            const descripcion = document.getElementById(`menu-descripcion-${nombreDia}`).value;
-
-            // Guardar los datos en localStorage
-            localStorage.setItem(`menu-${nombreDia}`, JSON.stringify({ nombre, precio, descripcion }));
-            alert(`Menú del ${nombreDia} guardado`);
-          });
+      // Configurar la sección "Salir":
+      const mensajeSalida = document.getElementById("mensaje-salir");
+      // Si no se usó 'mensaje-salir' id, usamos 'mensaje-salida'
+      const msgSalida = document.getElementById("mensaje-salida");
+      if(msgSalida) {
+        const fechaActual = new Date();
+        msgSalida.textContent =
+          "Tu sesión finalizó el " +
+          fechaActual.toLocaleDateString() +
+          " a las " +
+          fechaActual.toLocaleTimeString();
+      }
+      const btnEntrarSesion = document.getElementById("btnEntrarSesion");
+      if(btnEntrarSesion) {
+        btnEntrarSesion.addEventListener("click", () => {
+          alert("Por favor, inicia sesión nuevamente. (Simulación de login)");
+          sections.forEach(sec => sec.style.display = "none");
+          document.getElementById("seccion-inicio").style.display = "block";
         });
-      });
+      }
     });
   </script>
-
 </body>
 </html>
