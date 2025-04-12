@@ -1,107 +1,253 @@
-<script>
-  let usuarioActual = null;
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Healthy Box</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde-principal: #3a9639;
+      --verde-oscuro: #2f7c2f;
+      --fondo-claro: rgba(255,255,255,0.9);
+      --borde-radius: 10px;
+    }
+    body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      background: url('img/milogo1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+    }
+    header, main {
+      display: none;
+    }
+    .section {
+      display: none;
+      background-color: var(--fondo-claro);
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: var(--borde-radius);
+      max-width: 1200px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .active {
+      display: block !important;
+    }
+    header {
+      background-color: var(--fondo-claro);
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 20px;
+    }
+    header img {
+      height: 50px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+    nav a {
+      text-decoration: none;
+      font-weight: 600;
+      color: var(--verde-principal);
+    }
+    nav a:hover {
+      color: var(--verde-oscuro);
+    }
+    input, button {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: var(--verde-principal);
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: var(--verde-oscuro);
+    }
+  </style>
+</head>
+<body>
+  <section id="login" class="section active">
+    <h2>Iniciar Sesión</h2>
+    <form id="loginForm">
+      <label>Email:<br><input type="email" id="loginEmail" required></label><br>
+      <label>Contraseña:<br><input type="password" id="loginPassword" required></label><br>
+    </form>
+    <p>¿No tenés cuenta? <a href="#" onclick="mostrarRegistro()">Registrarse</a></p>
+  </section>
 
-  document.getElementById('loginForm').insertAdjacentHTML('beforeend', '<br><label><input type="checkbox" id="recordarme"> Recordarme</label>');
+  <section id="registro" class="section">
+    <h2>Registrarse</h2>
+    <form id="registroForm">
+      <label>Nombre completo:<br><input type="text" id="registroNombre" required></label><br>
+      <label>Email:<br><input type="email" id="registroEmail" required></label><br>
+      <label>Contraseña:<br><input type="password" id="registroPassword" required></label><br>
+      <button type="submit">Crear Cuenta</button>
+    </form>
+    <p>¿Ya tenés cuenta? <a href="#" onclick="mostrarLogin()">Iniciar sesión</a></p>
+  </section>
 
-  // Registro con nombre
-  document.getElementById('registroForm').insertAdjacentHTML('afterbegin', '<label>Nombre completo:<br><input type="text" id="registroNombre" required></label><br>');
+  <section id="confirmacion" class="section">
+    <h2>Verificación de correo</h2>
+    <p>Te enviamos un código de verificación. Ingresalo aquí:</p>
+    <input type="text" id="codigoVerificacion" placeholder="Código de verificación">
+    <button onclick="verificarCodigo()">Confirmar</button>
+  </section>
 
-  const registroForm = document.getElementById('registroForm');
-  registroForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const nombre = document.getElementById('registroNombre').value;
-    const email = document.getElementById('registroEmail').value;
-    const password = document.getElementById('registroPassword').value;
-    const codigo = generarCodigo();
-    const usuario = { nombre, email, password, verificado: false, codigo };
-    localStorage.setItem('usuario', JSON.stringify(usuario));
-    alert('Código de verificación: ' + codigo);
-    mostrarConfirmacion();
-  });
+  <header>
+    <img src="img/milogo.jpg" alt="Logo">
+    <nav>
+      <ul>
+        <li><a href="#" class="nav-link" data-target="inicio">Inicio</a></li>
+        <li><a href="#" class="nav-link" data-target="menu">Menú</a></li>
+        <li><a href="#" class="nav-link" data-target="clientes">Clientes</a></li>
+        <li><a href="#" class="nav-link" data-target="insumos">Insumos</a></li>
+        <li><a href="#" class="nav-link" data-target="reportes">Reportes</a></li>
+        <li><a href="#" onclick="cerrarSesion()">Cerrar sesión</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  const loginForm = document.getElementById('loginForm');
-  loginForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    const recordarme = document.getElementById('recordarme').checked;
-    const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
-    if (usuarioGuardado && usuarioGuardado.email === email && usuarioGuardado.password === password) {
-      if (!usuarioGuardado.verificado && usuarioGuardado.codigo) {
-        alert('Por favor confirmá tu correo con el código.');
+  <main>
+    <section id="inicio" class="section">
+      <h2>Bienvenido/a</h2>
+    </section>
+    <section id="menu" class="section">
+      <h2>Menú Semanal</h2>
+      <p>Aquí irá el menú diario editable.</p>
+    </section>
+    <section id="clientes" class="section">
+      <h2>Clientes</h2>
+      <p>Gestión de clientes aquí.</p>
+    </section>
+    <section id="insumos" class="section">
+      <h2>Insumos</h2>
+      <p>Listado y carga de insumos.</p>
+    </section>
+    <section id="reportes" class="section">
+      <h2>Reportes</h2>
+      <p>Resumen de actividad.</p>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let usuarioActual = null;
+      const loginForm = document.getElementById('loginForm');
+      loginForm.insertAdjacentHTML('beforeend', '<br><label><input type="checkbox" id="recordarme"> Recordarme</label><br><button type="submit">Entrar</button>');
+
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const target = link.dataset.target;
+          document.querySelectorAll('main .section').forEach(s => s.classList.remove('active'));
+          document.getElementById(target).classList.add('active');
+        });
+      });
+
+      document.getElementById('registroForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nombre = document.getElementById('registroNombre').value;
+        const email = document.getElementById('registroEmail').value;
+        const password = document.getElementById('registroPassword').value;
+        const codigo = generarCodigo();
+        const usuario = { nombre, email, password, verificado: false, codigo };
+        localStorage.setItem('usuario', JSON.stringify(usuario));
+        alert('Código de verificación: ' + codigo);
         mostrarConfirmacion();
-      } else {
-        if (recordarme) localStorage.setItem('sesionActiva', 'true');
-        localStorage.setItem('usuarioActivo', JSON.stringify(usuarioGuardado));
-        usuarioActual = usuarioGuardado;
+      });
+
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const recordarme = document.getElementById('recordarme').checked;
+        const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
+        if (usuarioGuardado && usuarioGuardado.email === email && usuarioGuardado.password === password) {
+          if (!usuarioGuardado.verificado && usuarioGuardado.codigo) {
+            alert('Confirmá tu correo con el código');
+            mostrarConfirmacion();
+          } else {
+            if (recordarme) localStorage.setItem('sesionActiva', 'true');
+            localStorage.setItem('usuarioActivo', JSON.stringify(usuarioGuardado));
+            usuarioActual = usuarioGuardado;
+            iniciarSesion();
+          }
+        } else {
+          alert('Usuario o contraseña incorrectos');
+        }
+      });
+
+      if (localStorage.getItem('sesionActiva') === 'true') {
+        usuarioActual = JSON.parse(localStorage.getItem('usuarioActivo')) || {};
         iniciarSesion();
       }
-    } else {
-      alert('Usuario o contraseña incorrectos');
-    }
-  });
 
-  function iniciarSesion() {
-    usuarioActual = JSON.parse(localStorage.getItem('usuarioActivo')) || {};
-    document.getElementById('login').classList.remove('active');
-    document.querySelector('header').style.display = 'flex';
-    document.querySelector('main').style.display = 'block';
-    document.getElementById('inicio').classList.add('active');
-    const bienvenida = document.createElement('p');
-    bienvenida.textContent = `¡Bienvenido/a, ${usuarioActual.nombre}!`;
-    bienvenida.style.fontWeight = 'bold';
-    document.getElementById('inicio').prepend(bienvenida);
-  }
+      window.mostrarLogin = function () {
+        document.getElementById('login').classList.add('active');
+        document.getElementById('registro').classList.remove('active');
+        document.getElementById('confirmacion').classList.remove('active');
+      };
 
-  function cerrarSesion() {
-    alert('Sesión cerrada');
-    localStorage.removeItem('sesionActiva');
-    localStorage.removeItem('usuarioActivo');
-    document.querySelector('header').style.display = 'none';
-    document.querySelector('main').style.display = 'none';
-    document.getElementById('login').classList.add('active');
-  }
+      window.mostrarRegistro = function () {
+        document.getElementById('registro').classList.add('active');
+        document.getElementById('login').classList.remove('active');
+        document.getElementById('confirmacion').classList.remove('active');
+      };
 
-  function generarCodigo() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
+      window.mostrarConfirmacion = function () {
+        document.getElementById('confirmacion').classList.add('active');
+        document.getElementById('registro').classList.remove('active');
+        document.getElementById('login').classList.remove('active');
+      };
 
-  function mostrarLogin() {
-    document.getElementById('login').classList.add('active');
-    document.getElementById('registro').classList.remove('active');
-    document.getElementById('confirmacion').classList.remove('active');
-  }
+      window.verificarCodigo = function () {
+        const ingresado = document.getElementById('codigoVerificacion').value;
+        const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
+        if (usuarioGuardado && usuarioGuardado.codigo === ingresado) {
+          usuarioGuardado.verificado = true;
+          delete usuarioGuardado.codigo;
+          localStorage.setItem('usuario', JSON.stringify(usuarioGuardado));
+          alert('Cuenta verificada con éxito');
+          mostrarLogin();
+        } else {
+          alert('Código incorrecto');
+        }
+      };
 
-  function mostrarRegistro() {
-    document.getElementById('registro').classList.add('active');
-    document.getElementById('login').classList.remove('active');
-    document.getElementById('confirmacion').classList.remove('active');
-  }
+      window.cerrarSesion = function () {
+        alert('Sesión cerrada');
+        localStorage.removeItem('sesionActiva');
+        localStorage.removeItem('usuarioActivo');
+        document.querySelector('header').style.display = 'none';
+        document.querySelector('main').style.display = 'none';
+        document.getElementById('login').classList.add('active');
+      };
 
-  function mostrarConfirmacion() {
-    document.getElementById('confirmacion').classList.add('active');
-    document.getElementById('registro').classList.remove('active');
-    document.getElementById('login').classList.remove('active');
-  }
+      function iniciarSesion() {
+        usuarioActual = JSON.parse(localStorage.getItem('usuarioActivo')) || {};
+        document.getElementById('login').classList.remove('active');
+        document.querySelector('header').style.display = 'flex';
+        document.querySelector('main').style.display = 'block';
+        document.getElementById('inicio').classList.add('active');
+        const bienvenida = document.createElement('p');
+        bienvenida.textContent = `¡Bienvenido/a, ${usuarioActual.nombre}!`;
+        bienvenida.style.fontWeight = 'bold';
+        const inicio = document.getElementById('inicio');
+        if (inicio.firstChild) inicio.removeChild(inicio.firstChild);
+        inicio.prepend(bienvenida);
+      }
 
-  function verificarCodigo() {
-    const ingresado = document.getElementById('codigoVerificacion').value;
-    const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
-    if (usuarioGuardado && usuarioGuardado.codigo === ingresado) {
-      usuarioGuardado.verificado = true;
-      delete usuarioGuardado.codigo;
-      localStorage.setItem('usuario', JSON.stringify(usuarioGuardado));
-      alert('Cuenta verificada con éxito');
-      mostrarLogin();
-    } else {
-      alert('Código incorrecto');
-    }
-  }
-
-  window.addEventListener('load', () => {
-    if (localStorage.getItem('sesionActiva') === 'true') {
-      usuarioActual = JSON.parse(localStorage.getItem('usuarioActivo')) || {};
-      iniciarSesion();
-    }
-  });
-</script>
+      function generarCodigo() {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+      }
+    });
+  </script>
+</body>
+</html>
