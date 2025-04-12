@@ -1,266 +1,326 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>The Healthy Box - Proyecto Final</title>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="stylesheet" 
-        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Healthy Box</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --main-green: #3a9639;
-      --main-green-dark: #2f7c2f;
-      --bg-overlay: rgba(255,255,255,0.9);
-      --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      --border-radius: 8px;
+      --verde-claro: #dff0dc;
+      --verde-principal: #3a9639;
+      --verde-oscuro: #2f7c2f;
+      --fondo-claro: rgba(255,255,255,0.9);
+      --borde-radio: 10px;
     }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       font-family: 'Open Sans', sans-serif;
-      color: #333;
-      /* Fondo con imagen, asegúrate que img/milogo.jpg exista */
-      background: url("img/milogo.jpg") no-repeat center center fixed;
+      background: url('https://cdn.pixabay.com/photo/2017/08/30/07/52/background-2692430_1280.jpg') no-repeat center center fixed;
       background-size: cover;
-      position: relative;
+      color: #333;
     }
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: var(--bg-overlay);
-      z-index: -1;
-    }
-    /* ENCABEZADO */
+
     header {
+      background-color: var(--fondo-claro);
+      padding: 10px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 20px;
-      background-color: var(--bg-overlay);
-      box-shadow: var(--card-shadow);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .logo-container img {
+
+    header img {
       height: 50px;
     }
+
     nav ul {
       list-style: none;
       display: flex;
       gap: 15px;
-      align-items: center;
     }
+
     nav a {
       text-decoration: none;
-      color: var(--main-green);
       font-weight: 600;
-      transition: color 0.3s;
+      color: var(--verde-principal);
     }
+
     nav a:hover {
-      color: var(--main-green-dark);
+      color: var(--verde-oscuro);
     }
-    /* SECCIONES */
-    .section-content {
+
+    .section {
       display: none;
       max-width: 1200px;
       margin: 20px auto;
-      background-color: var(--bg-overlay);
+      background-color: var(--fondo-claro);
       padding: 20px;
-      border-radius: var(--border-radius);
-      box-shadow: var(--card-shadow);
+      border-radius: var(--borde-radio);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    /* SECCIÓN: INICIO (Hero) */
-    .hero {
-      text-align: center;
-      padding: 40px 20px;
-      border-radius: var(--border-radius);
-      /* Imagen de fondo para el hero (ajusta img/milogo1.jpg si deseas) */
-      background: url("img/milogo1.jpg") no-repeat center center;
-      background-size: cover;
-      position: relative;
-      box-shadow: var(--card-shadow);
-      margin-bottom: 20px;
-      color: #fff;
+
+    .active {
+      display: block;
     }
-    .hero::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.3);
-      border-radius: var(--border-radius);
-      z-index: 1;
+
+    h2 {
+      color: var(--verde-principal);
+      margin-bottom: 10px;
     }
-    .hero h1, .hero p, .hero button {
-      position: relative;
-      z-index: 2;
+
+    form label {
+      display: block;
+      margin: 10px 0 5px;
     }
-    .hero h1 {
-      font-size: 2.8rem;
-      margin-bottom: 15px;
+
+    input, select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+      max-width: 300px;
     }
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
-    .hero button {
-      background-color: var(--main-green);
-      color: #fff;
+
+    button {
+      background-color: var(--verde-principal);
+      color: white;
       border: none;
-      padding: 12px 20px;
+      padding: 10px 15px;
       border-radius: 5px;
+      margin-top: 10px;
       cursor: pointer;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: background-color 0.3s;
     }
-    .hero button:hover {
-      background-color: var(--main-green-dark);
+
+    button:hover {
+      background-color: var(--verde-oscuro);
     }
-    /* CONTENIDO DE SOLAPAS (placeholder) */
-    .placeholder {
-      text-align: center;
-      font-size: 1.2rem;
-      padding: 40px 20px;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
     }
-    /* Ejemplo básico para solapas adicionales */
-    /* Puedes personalizar cada sección según tus necesidades */
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
   </style>
 </head>
 <body>
-  <!-- ENCABEZADO -->
   <header>
-    <div class="logo-container">
-      <!-- Logo, asegúrate de tener img/milogo.jpg -->
-      <img src="img/milogo.jpg" alt="The Healthy Box - Logo">
-    </div>
+    <img src="https://cdn-icons-png.flaticon.com/512/2909/2909833.png" alt="Logo">
     <nav>
       <ul>
-        <li><a href="#" class="nav-link" data-section="inicio">Inicio</a></li>
-        <li><a href="#" class="nav-link" data-section="menu">Menú</a></li>
-        <li><a href="#" class="nav-link" data-section="pedidos">Pedidos</a></li>
-        <li><a href="#" class="nav-link" data-section="clientes">Clientes</a></li>
-        <li><a href="#" class="nav-link" data-section="insumos">Insumos</a></li>
-        <li><a href="#" class="nav-link" data-section="reportes">Reportes</a></li>
-        <li><a href="#" class="nav-link" data-section="salir">Salir</a></li>
+        <li><a href="#" class="nav-link" data-target="inicio">Inicio</a></li>
+        <li><a href="#" class="nav-link" data-target="menu">Menú Semanal</a></li>
+        <li><a href="#" class="nav-link" data-target="clientes">Clientes</a></li>
+        <li><a href="#" class="nav-link" data-target="insumos">Insumos</a></li>
+        <li><a href="#" class="nav-link" data-target="reportes">Reportes</a></li>
+        <li><a href="#" class="nav-link" data-target="salir">Salir</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- SECCIÓN: INICIO -->
-  <section id="seccion-inicio" class="section-content">
-    <div class="hero">
-      <h1>The Healthy Box</h1>
-      <p>Gestión completa para pedidos, ventas e inventario de comida saludable.</p>
-      <button id="btnMenuSemanal">Ver Menú Semanal</button>
-    </div>
-    <div class="placeholder">
-      <p>Bienvenido al panel de control de The Healthy Box.</p>
-    </div>
-  </section>
+  <main>
+    <section id="inicio" class="section active">
+      <h2>Bienvenido a The Healthy Box</h2>
+      <p>Usa el menú para comenzar a cargar información.</p>
+    </section>
 
-  <!-- SECCIÓN: MENÚ -->
-  <section id="seccion-menu" class="section-content">
-    <div class="placeholder">
-      <h2>Menú</h2>
-      <p>Aquí se mostrarán los platos y se podrá gestionar el menú.</p>
-    </div>
-  </section>
+    <section id="menu" class="section">
+      <h2>Menú Semanal</h2>
+      <div id="dias-menu"></div>
+    </section>
 
-  <!-- SECCIÓN: PEDIDOS -->
-  <section id="seccion-pedidos" class="section-content">
-    <div class="placeholder">
-      <h2>Pedidos</h2>
-      <p>Aquí podrás ver y gestionar los pedidos realizados.</p>
-    </div>
-  </section>
-
-  <!-- SECCIÓN: CLIENTES -->
-  <section id="seccion-clientes" class="section-content">
-    <div class="placeholder">
+    <section id="clientes" class="section">
       <h2>Clientes</h2>
-      <p>Aquí se mostrará la lista de clientes y se podrán agregar nuevos registros.</p>
-    </div>
-  </section>
+      <form id="form-clientes">
+        <label>Nombre:<input type="text" id="nombreCliente" required></label>
+        <label>Teléfono:<input type="text" id="telefonoCliente"></label>
+        <button type="submit">Guardar Cliente</button>
+      </form>
+      <table id="tabla-clientes"></table>
+    </section>
 
-  <!-- SECCIÓN: INSUMOS -->
-  <section id="seccion-insumos" class="section-content">
-    <div class="placeholder">
+    <section id="insumos" class="section">
       <h2>Insumos</h2>
-      <p>Aquí se gestionarán los insumos y el stock disponible.</p>
-    </div>
-  </section>
+      <form id="form-insumos">
+        <label>Nombre:<input type="text" id="nombreInsumo" required></label>
+        <label>Cantidad:<input type="number" id="cantidadInsumo"></label>
+        <label>Unidad:<input type="text" id="unidadInsumo"></label>
+        <button type="submit">Guardar Insumo</button>
+      </form>
+      <table id="tabla-insumos"></table>
+    </section>
 
-  <!-- SECCIÓN: REPORTES -->
-  <section id="seccion-reportes" class="section-content">
-    <div class="placeholder">
+    <section id="reportes" class="section">
       <h2>Reportes</h2>
-      <p>Visualiza estadísticas y reportes del funcionamiento diario.</p>
-    </div>
-  </section>
+      <ul id="lista-reportes"></ul>
+    </section>
 
-  <!-- SECCIÓN: SALIR -->
-  <section id="seccion-salir" class="section-content">
-    <div class="placeholder">
-      <h2>¡Hasta pronto!</h2>
-      <p id="mensaje-salida"></p>
-      <button id="btnEntrarSesion">Entrar a sesión</button>
-    </div>
-  </section>
+    <section id="salir" class="section">
+      <h2>Sesíon finalizada</h2>
+      <p>Gracias por usar la app. Puedes cerrar el navegador o volver a Inicio.</p>
+      <button onclick="mostrarSeccion('inicio')">Volver a Inicio</button>
+    </section>
+  </main>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // Seleccionar enlaces de navegación y secciones
-      const links = document.querySelectorAll(".nav-link");
-      const sections = document.querySelectorAll(".section-content");
-      // Mostrar la sección "Inicio" por defecto
-      document.getElementById("seccion-inicio").style.display = "block";
-
-      // Configurar la navegación para que muestre la sección correspondiente
-      links.forEach(link => {
-        link.addEventListener("click", e => {
-          e.preventDefault();
-          const sectionToShow = link.getAttribute("data-section");
-          sections.forEach(sec => sec.style.display = "none");
-          const targetSection = document.getElementById(`seccion-${sectionToShow}`);
-          if(targetSection) {
-            targetSection.style.display = "block";
-          } else {
-            alert("La sección solicitada no existe.");
-          }
-        });
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = link.dataset.target;
+        mostrarSeccion(target);
       });
-
-      // Botón para ver el menú semanal (dentro de la sección Inicio)
-      const btnMenuSemanal = document.getElementById("btnMenuSemanal");
-      btnMenuSemanal.addEventListener("click", () => {
-        sections.forEach(sec => sec.style.display = "none");
-        document.getElementById("seccion-menu").style.display = "block";
-      });
-
-      // Configurar la sección "Salir":
-      const mensajeSalida = document.getElementById("mensaje-salir");
-      // Si no se usó 'mensaje-salir' id, usamos 'mensaje-salida'
-      const msgSalida = document.getElementById("mensaje-salida");
-      if(msgSalida) {
-        const fechaActual = new Date();
-        msgSalida.textContent =
-          "Adios Nan y Gus, mañana sera un grande dia de ventas !;
-      }
-      const btnEntrarSesion = document.getElementById("btnEntrarSesion");
-      if(btnEntrarSesion) {
-        btnEntrarSesion.addEventListener("click", () => {
-          alert("Por favor, inicia sesión nuevamente. (Simulación de login)");
-          sections.forEach(sec => sec.style.display = "none");
-          document.getElementById("seccion-inicio").style.display = "block";
-        });
-      }
     });
+
+    function mostrarSeccion(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // MENU SEMANAL
+    const dias = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+    const diasContainer = document.getElementById('dias-menu');
+    dias.forEach(dia => {
+      const cont = document.createElement('div');
+      cont.innerHTML = `
+        <h3>${dia}</h3>
+        <input type="text" placeholder="Plato" id="${dia}-plato">
+        <input type="text" placeholder="Descripción" id="${dia}-desc">
+        <button onclick="guardarMenu('${dia}')">Guardar</button>
+        <p id="ver-${dia}"></p>
+      `;
+      diasContainer.appendChild(cont);
+      mostrarMenu(dia);
+    });
+
+    function guardarMenu(dia) {
+      const plato = document.getElementById(`${dia}-plato`).value;
+      const desc = document.getElementById(`${dia}-desc`).value;
+      localStorage.setItem(`menu-${dia}`, JSON.stringify({plato, desc}));
+      mostrarMenu(dia);
+    }
+
+    function mostrarMenu(dia) {
+      const data = localStorage.getItem(`menu-${dia}`);
+      if (data) {
+        const {plato, desc} = JSON.parse(data);
+        document.getElementById(`ver-${dia}`).innerText = `Plato: ${plato} - ${desc}`;
+      }
+    }
+
+    // CLIENTES
+    const formClientes = document.getElementById('form-clientes');
+    const tablaClientes = document.getElementById('tabla-clientes');
+    let clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
+
+    formClientes.onsubmit = e => {
+      e.preventDefault();
+      const nombre = document.getElementById('nombreCliente').value;
+      const telefono = document.getElementById('telefonoCliente').value;
+      clientes.push({nombre, telefono});
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+      renderClientes();
+      formClientes.reset();
+    }
+
+    function renderClientes() {
+      tablaClientes.innerHTML = '<tr><th>Nombre</th><th>Teléfono</th><th>Acciones</th></tr>';
+      clientes.forEach((cli, i) => {
+        const row = `<tr><td>${cli.nombre}</td><td>${cli.telefono}</td>
+        <td><button onclick="editarCliente(${i})">Editar</button>
+        <button onclick="eliminarCliente(${i})">Eliminar</button></td></tr>`;
+        tablaClientes.innerHTML += row;
+      });
+    }
+
+    function eliminarCliente(i) {
+      clientes.splice(i, 1);
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+      renderClientes();
+    }
+
+    function editarCliente(i) {
+      const nuevoNombre = prompt("Nuevo nombre", clientes[i].nombre);
+      const nuevoTel = prompt("Nuevo teléfono", clientes[i].telefono);
+      if(nuevoNombre){ clientes[i].nombre = nuevoNombre; }
+      if(nuevoTel){ clientes[i].telefono = nuevoTel; }
+      localStorage.setItem('clientes', JSON.stringify(clientes));
+      renderClientes();
+    }
+
+    renderClientes();
+
+    // INSUMOS
+    const formInsumos = document.getElementById('form-insumos');
+    const tablaInsumos = document.getElementById('tabla-insumos');
+    let insumos = JSON.parse(localStorage.getItem('insumos') || '[]');
+
+    formInsumos.onsubmit = e => {
+      e.preventDefault();
+      const nombre = document.getElementById('nombreInsumo').value;
+      const cantidad = document.getElementById('cantidadInsumo').value;
+      const unidad = document.getElementById('unidadInsumo').value;
+      insumos.push({nombre, cantidad, unidad});
+      localStorage.setItem('insumos', JSON.stringify(insumos));
+      renderInsumos();
+      formInsumos.reset();
+    }
+
+    function renderInsumos() {
+      tablaInsumos.innerHTML = '<tr><th>Nombre</th><th>Cantidad</th><th>Unidad</th><th>Acciones</th></tr>';
+      insumos.forEach((i, idx) => {
+        const row = `<tr><td>${i.nombre}</td><td>${i.cantidad}</td><td>${i.unidad}</td>
+        <td><button onclick="editarInsumo(${idx})">Editar</button>
+        <button onclick="eliminarInsumo(${idx})">Eliminar</button></td></tr>`;
+        tablaInsumos.innerHTML += row;
+      });
+    }
+
+    function eliminarInsumo(i) {
+      insumos.splice(i, 1);
+      localStorage.setItem('insumos', JSON.stringify(insumos));
+      renderInsumos();
+    }
+
+    function editarInsumo(i) {
+      const nuevoNombre = prompt("Nuevo nombre", insumos[i].nombre);
+      const nuevaCant = prompt("Nueva cantidad", insumos[i].cantidad);
+      const nuevaUnidad = prompt("Nueva unidad", insumos[i].unidad);
+      if(nuevoNombre) insumos[i].nombre = nuevoNombre;
+      if(nuevaCant) insumos[i].cantidad = nuevaCant;
+      if(nuevaUnidad) insumos[i].unidad = nuevaUnidad;
+      localStorage.setItem('insumos', JSON.stringify(insumos));
+      renderInsumos();
+    }
+
+    renderInsumos();
+
+    // REPORTES
+    const listaReportes = document.getElementById('lista-reportes');
+    function renderReportes() {
+      listaReportes.innerHTML = `
+        <li>Total de Clientes: ${clientes.length}</li>
+        <li>Total de Insumos: ${insumos.length}</li>
+        <li>Días con Menú cargado: ${dias.filter(d => localStorage.getItem(`menu-${d}`)).length}</li>
+      `;
+    }
+
+    document.querySelector('[data-target="reportes"]').addEventListener('click', renderReportes);
   </script>
 </body>
 </html>
