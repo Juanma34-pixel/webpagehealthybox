@@ -1,216 +1,786 @@
-let menu = [], clientes = [], pedidos = [], insumos = [];
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Healthy Box - Proyecto Final</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" 
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" />
 
-function generateId() {
-  return Date.now() + "" + Math.floor(Math.random() * 1000);
-}
-
-function loadData() {
-  menu = JSON.parse(localStorage.getItem("menu")) || [];
-  clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-  pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-  insumos = JSON.parse(localStorage.getItem("insumos")) || [];
-}
-
-function saveData() {
-  localStorage.setItem("menu", JSON.stringify(menu));
-  localStorage.setItem("clientes", JSON.stringify(clientes));
-  localStorage.setItem("pedidos", JSON.stringify(pedidos));
-  localStorage.setItem("insumos", JSON.stringify(insumos));
-}
-
-function renderMenu() {
-  const tbody = document.querySelector("#tabla-menu tbody");
-  tbody.innerHTML = "";
-  menu.forEach(plato => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${plato.nombre}</td>
-      <td>$${plato.precio}</td>
-      <td>${plato.descripcion}</td>
-      <td><button onclick="eliminarPlato('${plato.id}')">Borrar</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-  const selectPlato = document.getElementById("pedido-plato");
-  selectPlato.innerHTML = "";
-  menu.forEach(plato => {
-    const opt = document.createElement("option");
-    opt.value = plato.id;
-    opt.textContent = plato.nombre;
-    selectPlato.appendChild(opt);
-  });
-}
-
-function eliminarPlato(id) {
-  menu = menu.filter(p => p.id !== id);
-  saveData(); renderMenu(); renderPedidos(); renderReportes();
-}
-
-function renderClientes() {
-  const tbody = document.querySelector("#tabla-clientes tbody");
-  tbody.innerHTML = "";
-  clientes.forEach(c => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${c.nombre}</td>
-      <td>${c.telefono}</td>
-      <td>${c.direccion}</td>
-      <td><button onclick="eliminarCliente('${c.id}')">Borrar</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-  const selectCliente = document.getElementById("pedido-cliente");
-  selectCliente.innerHTML = "";
-  clientes.forEach(cliente => {
-    const opt = document.createElement("option");
-    opt.value = cliente.id;
-    opt.textContent = cliente.nombre;
-    selectCliente.appendChild(opt);
-  });
-}
-
-function eliminarCliente(id) {
-  if (pedidos.some(p => p.clienteId === id)) {
-    alert("No se puede eliminar, tiene pedidos.");
-    return;
-  }
-  clientes = clientes.filter(c => c.id !== id);
-  saveData(); renderClientes(); renderReportes();
-}
-
-function renderPedidos() {
-  const tbody = document.querySelector("#tabla-pedidos tbody");
-  tbody.innerHTML = "";
-  pedidos.forEach(p => {
-    const cliente = clientes.find(c => c.id === p.clienteId);
-    const plato = menu.find(m => m.id === p.platoId);
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${cliente?.nombre || "?"}</td>
-      <td>${plato?.nombre || "?"}</td>
-      <td>${p.estado}</td>
-      <td><button onclick="eliminarPedido('${p.id}')">Borrar</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  const listaProx = document.getElementById("lista-proximos-pedidos");
-  listaProx.innerHTML = "";
-  pedidos.filter(p => p.estado !== "Entregado").slice(0, 3).forEach(p => {
-    const cliente = clientes.find(c => c.id === p.clienteId);
-    const li = document.createElement("li");
-    li.textContent = `${cliente?.nombre || "?"} - ${p.estado}`;
-    listaProx.appendChild(li);
-  });
-}
-
-function eliminarPedido(id) {
-  pedidos = pedidos.filter(p => p.id !== id);
-  saveData(); renderPedidos(); renderReportes();
-}
-
-function renderInsumos() {
-  const tbody = document.querySelector("#tabla-insumos tbody");
-  tbody.innerHTML = "";
-  insumos.forEach(i => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${i.nombre}</td>
-      <td>${i.cantidad}</td>
-      <td>${i.unidad}</td>
-      <td><button onclick="eliminarInsumo('${i.id}')">Borrar</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function eliminarInsumo(id) {
-  insumos = insumos.filter(i => i.id !== id);
-  saveData(); renderInsumos(); renderReportes();
-}
-
-function renderReportes() {
-  document.getElementById("reporte-total-clientes").textContent = `Total de clientes: ${clientes.length}`;
-  document.getElementById("reporte-total-menu").textContent = `Total de platos en el menú: ${menu.length}`;
-  document.getElementById("reporte-total-pedidos").textContent = `Total de pedidos: ${pedidos.length}`;
-  document.getElementById("reporte-total-insumos").textContent = `Total de insumos: ${insumos.length}`;
-
-  let totalVentas = 0;
-  pedidos.filter(p => p.estado === "Entregado").forEach(p => {
-    const plato = menu.find(m => m.id === p.platoId);
-    if (plato) totalVentas += Number(plato.precio);
-  });
-  document.getElementById("ventas-hoy").textContent = `Total de ventas hoy: $${totalVentas}`;
-  document.getElementById("ventas-semana").textContent = `Resumen semanal: $${totalVentas}`;
-
-  const conteo = {};
-  pedidos.filter(p => p.estado === "Entregado").forEach(p => {
-    conteo[p.platoId] = (conteo[p.platoId] || 0) + 1;
-  });
-  const topUl = document.getElementById("top-platos");
-  topUl.innerHTML = "";
-  Object.entries(conteo).sort((a, b) => b[1] - a[1]).slice(0, 3).forEach(([id, count]) => {
-    const plato = menu.find(m => m.id === id);
-    if (plato) {
-      const li = document.createElement("li");
-      li.textContent = `${plato.nombre} (vendidos: ${count})`;
-      topUl.appendChild(li);
+  <style>
+    /* ==================== VARIABLES Y RESET ==================== */
+    :root {
+      --main-green: #3a9639;
+      --main-green-dark: #2f7c2f;
+      --bg-overlay: rgba(255,255,255,0.9);
+      --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      --border-radius: 8px;
     }
-  });
-}
+    * {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+    }
 
-document.getElementById("form-menu").addEventListener("submit", e => {
-  e.preventDefault();
-  const nombre = document.getElementById("menu-nombre").value.trim();
-  const precio = parseFloat(document.getElementById("menu-precio").value);
-  const descripcion = document.getElementById("menu-descripcion").value.trim();
-  menu.push({ id: generateId(), nombre, precio, descripcion });
-  saveData(); renderMenu(); e.target.reset();
-});
+    /* ==================== BACKGROUND GENERAL ==================== */
+    body {
+      font-family: 'Open Sans', sans-serif;
+      color: #333;
+      /* Fondo con imagen: Asegúrate que el archivo fondo1.png esté en la carpeta img */
+      background: url("img/milogo.jpg") no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+    /* Overlay semitransparente para mejorar legibilidad */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg-overlay);
+      z-index: -1;
+    }
 
-document.getElementById("form-clientes").addEventListener("submit", e => {
-  e.preventDefault();
-  const nombre = document.getElementById("cliente-nombre").value.trim();
-  const telefono = document.getElementById("cliente-telefono").value.trim();
-  const direccion = document.getElementById("cliente-direccion").value.trim();
-  clientes.push({ id: generateId(), nombre, telefono, direccion });
-  saveData(); renderClientes(); e.target.reset();
-});
+    /* ==================== ENCABEZADO ==================== */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background-color: var(--bg-overlay);
+      box-shadow: var(--card-shadow);
+    }
+    .logo-container img {
+      height: 50px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--main-green);
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: var(--main-green-dark);
+    }
 
-document.getElementById("form-insumos").addEventListener("submit", e => {
-  e.preventDefault();
-  const nombre = document.getElementById("insumo-nombre").value.trim();
-  const cantidad = parseFloat(document.getElementById("insumo-cantidad").value);
-  const unidad = document.getElementById("insumo-unidad").value.trim();
-  insumos.push({ id: generateId(), nombre, cantidad, unidad });
-  saveData(); renderInsumos(); e.target.reset();
-});
+    /* ==================== SECCIONES ==================== */
+    .section-content {
+      display: none; /* Sólo se muestra la sección activa mediante JavaScript */
+      max-width: 1200px;
+      margin: 20px auto;
+      background-color: var(--bg-overlay);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+    }
+    .section-content h2 {
+      color: var(--main-green);
+      margin-bottom: 10px;
+    }
 
-document.getElementById("form-pedidos").addEventListener("submit", e => {
-  e.preventDefault();
-  const clienteId = document.getElementById("pedido-cliente").value;
-  const platoId = document.getElementById("pedido-plato").value;
-  const estado = document.getElementById("pedido-estado").value;
-  pedidos.push({ id: generateId(), clienteId, platoId, estado });
-  saveData(); renderPedidos(); renderReportes(); e.target.reset();
-});
+    /* ==================== HERO / INICIO ==================== */
+    .hero {
+      text-align: center;
+      padding: 40px 20px;
+      border-radius: var(--border-radius);
+      /* Imagen de fondo de la hero: Asegúrate que fondo2.png esté en la carpeta img */
+      background: url("img/milogo1.jpg") no-repeat center center;
+      background-size: cover;
+      position: relative;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.3);
+      border-radius: var(--border-radius);
+      z-index: 1;
+    }
+    .hero h1, .hero p, .hero button {
+      position: relative; /* Para que se muestren sobre el overlay */
+      z-index: 2;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    .hero button {
+      background-color: var(--main-green);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+    .hero button:hover {
+      background-color: var(--main-green-dark);
+    }
 
-document.getElementById("btnEntrarSesion").addEventListener("click", () => {
-  alert("Sesión iniciada (simulado).");
-  sections.forEach(sec => sec.style.display = "none");
-  document.getElementById("seccion-inicio").style.display = "block";
-});
+    /* ==================== CARDS ==================== */
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .card {
+      background-color: var(--bg-overlay);
+      flex: 1 1 300px;
+      min-width: 280px;
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+      border-radius: var(--border-radius);
+    }
+    .card h2 {
+      margin-top: 0;
+      color: var(--main-green);
+      margin-bottom: 8px;
+    }
+    .card p, .card ul {
+      color: #555;
+      padding-left: 10px;
+      margin-top: 5px;
+    }
+    .card ul {
+      list-style: square;
+    }
 
-const mensajeSalida = document.getElementById("mensaje-salida");
-if (mensajeSalida) {
-  const fechaActual = new Date();
-  mensajeSalida.textContent = `Tu sesión finalizó el ${fechaActual.toLocaleDateString()} a las ${fechaActual.toLocaleTimeString()}`;
-}
+    /* ==================== FORMULARIOS Y TABLAS ==================== */
+    .form-container {
+      background-color: var(--bg-overlay);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      margin-bottom: 20px;
+    }
+    .form-container label {
+      display: block;
+      margin-bottom: 8px;
+    }
+    .form-container input,
+    .form-container select {
+      padding: 6px;
+      margin: 5px 0 10px 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 200px;
+    }
+    .form-container button {
+      background-color: var(--main-green);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+    .form-container button:hover {
+      background-color: var(--main-green-dark);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: var(--bg-overlay);
+      box-shadow: var(--card-shadow);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+    table th, table td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    table thead {
+      background-color: #e1f3df;
+    }
+    table tr:last-child td {
+      border-bottom: none;
+    }
+    table button {
+      margin: 0 5px;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #d9534f;
+      color: #fff;
+    }
 
-// Inicializar todo
-loadData();
-renderMenu();
-renderClientes();
-renderInsumos();
-renderPedidos();
-renderReportes();
+    /* ==================== SECCIÓN SALIR (FINALIZAR SESIÓN) ==================== */
+    /* La sección de Salir muestra un mensaje con la fecha actual de cierre de sesión
+       y un botón para volver a "entrar" (simulado) */
+    .salida-container {
+      text-align: center;
+      padding: 30px;
+    }
+    .salida-container h2 {
+      font-size: 2rem;
+      color: var(--main-green);
+      margin-bottom: 15px;
+    }
+    .salida-container p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    .salida-container button {
+      background-color: var(--main-green);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+    }
+    .salida-container button:hover {
+      background-color: var(--main-green-dark);
+    }
+
+    /* ==================== FOOTER ==================== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: var(--bg-overlay);
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      margin-top: 30px;
+    }
+    footer p {
+      margin: 0;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <!-- ENCABEZADO -->
+  <header>
+    <div class="logo-container">
+      <!-- Asegúrate de tener el logo en img/milogo.jpg -->
+      <img src="img/milogo.jpg" alt="The Healthy Box - Logo">
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#" class="nav-link" data-section="inicio">Inicio</a></li>
+        <li><a href="#" class="nav-link" data-section="menu">Menú</a></li>
+        <li><a href="#" class="nav-link" data-section="pedidos">Pedidos</a></li>
+        <li><a href="#" class="nav-link" data-section="clientes">Clientes</a></li>
+        <li><a href="#" class="nav-link" data-section="insumos">Insumos</a></li>
+        <li><a href="#" class="nav-link" data-section="reportes">Reportes</a></li>
+        <li><a href="#" class="nav-link" data-section="salir">Salir</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- SECCIÓN: INICIO -->
+  <section id="seccion-inicio" class="section-content">
+    <div class="hero">
+      <h1>The Healthy Box</h1>
+      <p>Gestión completa para pedidos, ventas e inventario de comida saludable.</p>
+      <button id="btnMenuSemanal">Ver Menú Semanal</button>
+    </div>
+    <div class="cards-container">
+      <div class="card">
+        <h2>Ventas Recientes</h2>
+        <p id="ventas-hoy">Total de ventas hoy: $0</p>
+        <p id="ventas-semana">Resumen semanal: $0</p>
+      </div>
+      <div class="card">
+        <h2>Próximos Pedidos</h2>
+        <ul id="lista-proximos-pedidos"></ul>
+      </div>
+      <div class="card">
+        <h2>Top Platos Vendidos</h2>
+        <ul id="top-platos"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: MENÚ -->
+  <section id="seccion-menu" class="section-content">
+    <h2>Menú</h2>
+    <div class="form-container">
+      <form id="form-menu">
+        <label>Nombre del Plato:
+          <input type="text" id="menu-nombre" required>
+        </label>
+        <label>Precio:
+          <input type="number" id="menu-precio" min="0" required>
+        </label>
+        <label>Descripción:
+          <input type="text" id="menu-descripcion">
+        </label>
+        <button type="submit">Agregar Plato</button>
+      </form>
+    </div>
+    <table id="tabla-menu">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- SECCIÓN: PEDIDOS -->
+  <section id="seccion-pedidos" class="section-content">
+    <h2>Pedidos</h2>
+    <div class="form-container">
+      <form id="form-pedidos">
+        <label>Cliente:
+          <select id="pedido-cliente"></select>
+        </label>
+        <label>Plato:
+          <select id="pedido-plato"></select>
+        </label>
+        <label>Estado:
+          <select id="pedido-estado">
+            <option value="Pendiente">Pendiente</option>
+            <option value="En Proceso">En Proceso</option>
+            <option value="Entregado">Entregado</option>
+          </select>
+        </label>
+        <button type="submit">Agregar Pedido</button>
+      </form>
+    </div>
+    <table id="tabla-pedidos">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Plato</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- SECCIÓN: CLIENTES -->
+  <section id="seccion-clientes" class="section-content">
+    <h2>Clientes</h2>
+    <div class="form-container">
+      <form id="form-clientes">
+        <label>Nombre:
+          <input type="text" id="cliente-nombre" required>
+        </label>
+        <label>Teléfono:
+          <input type="text" id="cliente-telefono">
+        </label>
+        <label>Dirección:
+          <input type="text" id="cliente-direccion">
+        </label>
+        <button type="submit">Agregar Cliente</button>
+      </form>
+    </div>
+    <table id="tabla-clientes">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- SECCIÓN: INSUMOS -->
+  <section id="seccion-insumos" class="section-content">
+    <h2>Insumos</h2>
+    <div class="form-container">
+      <form id="form-insumos">
+        <label>Nombre del Insumo:
+          <input type="text" id="insumo-nombre" required>
+        </label>
+        <label>Cantidad:
+          <input type="number" id="insumo-cantidad" min="0" required>
+        </label>
+        <label>Unidad (kg, latas, etc.):
+          <input type="text" id="insumo-unidad" required>
+        </label>
+        <button type="submit">Agregar Insumo</button>
+      </form>
+    </div>
+    <table id="tabla-insumos">
+      <thead>
+        <tr>
+          <th>Insumo</th>
+          <th>Cantidad</th>
+          <th>Unidad</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- SECCIÓN: REPORTES -->
+  <section id="seccion-reportes" class="section-content">
+    <h2>Reportes</h2>
+    <ul>
+      <li id="reporte-total-clientes">Total de clientes: 0</li>
+      <li id="reporte-total-menu">Total de platos en el menú: 0</li>
+      <li id="reporte-total-pedidos">Total de pedidos: 0</li>
+      <li id="reporte-total-insumos">Total de insumos: 0</li>
+    </ul>
+  </section>
+
+  <!-- SECCIÓN: SALIR -->
+  <section id="seccion-salir" class="section-content">
+    <div class="salida-container">
+      <h2>¡Hasta pronto!</h2>
+      <p id="mensaje-salida"></p>
+      <button id="btnEntrarSesion">Entrar a sesión</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 The Healthy Box. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- JAVASCRIPT: LÓGICA DE LA APP -->
+  <script>
+    /********************************************************
+     *           DATOS EN LOCALSTORAGE
+     ********************************************************/
+    let menu = [];         // { id, nombre, precio, descripcion }
+    let clientes = [];     // { id, nombre, telefono, direccion }
+    let pedidos = [];      // { id, clienteId, platoId, estado }
+    let insumos = [];      // { id, nombre, cantidad, unidad }
+
+    function generateId() {
+      return Date.now() + "" + Math.floor(Math.random() * 1000);
+    }
+
+    function loadData() {
+      const menuData = localStorage.getItem("menu");
+      const clientesData = localStorage.getItem("clientes");
+      const pedidosData = localStorage.getItem("pedidos");
+      const insumosData = localStorage.getItem("insumos");
+      if (menuData) menu = JSON.parse(menuData);
+      if (clientesData) clientes = JSON.parse(clientesData);
+      if (pedidosData) pedidos = JSON.parse(pedidosData);
+      if (insumosData) insumos = JSON.parse(insumosData);
+    }
+
+    function saveData() {
+      localStorage.setItem("menu", JSON.stringify(menu));
+      localStorage.setItem("clientes", JSON.stringify(clientes));
+      localStorage.setItem("pedidos", JSON.stringify(pedidos));
+      localStorage.setItem("insumos", JSON.stringify(insumos));
+    }
+
+    /********************************************************
+     *                      MENÚ
+     ********************************************************/
+    function renderMenu() {
+      const tbody = document.querySelector("#tabla-menu tbody");
+      tbody.innerHTML = "";
+      menu.forEach(plato => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = 
+          <td>${plato.nombre}</td>
+          <td>$${plato.precio}</td>
+          <td>${plato.descripcion || ""}</td>
+          <td>
+            <button onclick="eliminarPlato('${plato.id}')">Borrar</button>
+          </td>
+        ;
+        tbody.appendChild(tr);
+      });
+      const selectPlato = document.getElementById("pedido-plato");
+      selectPlato.innerHTML = "";
+      menu.forEach(plato => {
+        const opt = document.createElement("option");
+        opt.value = plato.id;
+        opt.textContent = plato.nombre;
+        selectPlato.appendChild(opt);
+      });
+    }
+    function eliminarPlato(id) {
+      menu = menu.filter(m => m.id !== id);
+      saveData();
+      renderMenu();
+      renderPedidos();
+      renderReportes();
+    }
+
+    /********************************************************
+     *                     CLIENTES
+     ********************************************************/
+    function renderClientes() {
+      const tbody = document.querySelector("#tabla-clientes tbody");
+      tbody.innerHTML = "";
+      clientes.forEach(cliente => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = 
+          <td>${cliente.nombre}</td>
+          <td>${cliente.telefono}</td>
+          <td>${cliente.direccion}</td>
+          <td>
+            <button onclick="eliminarCliente('${cliente.id}')">Borrar</button>
+          </td>
+        ;
+        tbody.appendChild(tr);
+      });
+      const selectCliente = document.getElementById("pedido-cliente");
+      selectCliente.innerHTML = "";
+      clientes.forEach(cliente => {
+        const opt = document.createElement("option");
+        opt.value = cliente.id;
+        opt.textContent = cliente.nombre;
+        selectCliente.appendChild(opt);
+      });
+    }
+    function eliminarCliente(id) {
+      const clienteTienePedidos = pedidos.some(p => p.clienteId === id);
+      if (clienteTienePedidos) {
+        alert("No se puede eliminar el cliente porque tiene pedidos asociados.");
+        return;
+      }
+      clientes = clientes.filter(c => c.id !== id);
+      saveData();
+      renderClientes();
+      renderReportes();
+    }
+
+    /********************************************************
+     *                     PEDIDOS
+     ********************************************************/
+    function renderPedidos() {
+      const tbody = document.querySelector("#tabla-pedidos tbody");
+      tbody.innerHTML = "";
+      pedidos.forEach(pedido => {
+        const cliente = clientes.find(c => c.id === pedido.clienteId);
+        const plato = menu.find(m => m.id === pedido.platoId);
+        const tr = document.createElement("tr");
+        tr.innerHTML = 
+          <td>${cliente ? cliente.nombre : "Cliente no encontrado"}</td>
+          <td>${plato ? plato.nombre : "Plato no encontrado"}</td>
+          <td>${pedido.estado}</td>
+          <td>
+            <button onclick="eliminarPedido('${pedido.id}')">Borrar</button>
+          </td>
+        ;
+        tbody.appendChild(tr);
+      });
+      const listaProx = document.getElementById("lista-proximos-pedidos");
+      listaProx.innerHTML = "";
+      const pendientes = pedidos
+        .filter(p => p.estado !== "Entregado")
+        .slice(0, 3);
+      pendientes.forEach(pp => {
+        const cli = clientes.find(c => c.id === pp.clienteId);
+        const li = document.createElement("li");
+        li.textContent = ${cli ? cli.nombre : "N/A"} - ${pp.estado};
+        listaProx.appendChild(li);
+      });
+    }
+    function eliminarPedido(id) {
+      pedidos = pedidos.filter(p => p.id !== id);
+      saveData();
+      renderPedidos();
+      renderReportes();
+    }
+
+    /********************************************************
+     *                     INSUMOS
+     ********************************************************/
+    function renderInsumos() {
+      const tbody = document.querySelector("#tabla-insumos tbody");
+      tbody.innerHTML = "";
+      insumos.forEach(i => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = 
+          <td>${i.nombre}</td>
+          <td>${i.cantidad}</td>
+          <td>${i.unidad}</td>
+          <td>
+            <button onclick="eliminarInsumo('${i.id}')">Borrar</button>
+          </td>
+        ;
+        tbody.appendChild(tr);
+      });
+    }
+    function eliminarInsumo(id) {
+      insumos = insumos.filter(i => i.id !== id);
+      saveData();
+      renderInsumos();
+      renderReportes();
+    }
+
+    /********************************************************
+     *                    REPORTES
+     ********************************************************/
+    function renderReportes() {
+      document.getElementById("reporte-total-clientes").textContent =
+        Total de clientes: ${clientes.length};
+      document.getElementById("reporte-total-menu").textContent =
+        Total de platos en el menú: ${menu.length};
+      document.getElementById("reporte-total-pedidos").textContent =
+        Total de pedidos: ${pedidos.length};
+      document.getElementById("reporte-total-insumos").textContent =
+        Total de insumos: ${insumos.length};
+
+      let totalVentas = 0;
+      const pedidosEntregados = pedidos.filter(p => p.estado === "Entregado");
+      pedidosEntregados.forEach(ped => {
+        const plato = menu.find(m => m.id === ped.platoId);
+        if (plato) totalVentas += Number(plato.precio);
+      });
+      document.getElementById("ventas-hoy").textContent =
+        Total de ventas hoy: $${totalVentas};
+      document.getElementById("ventas-semana").textContent =
+        Resumen semanal: $${totalVentas};
+      renderTopPlatos();
+    }
+    function renderTopPlatos() {
+      const topUl = document.getElementById("top-platos");
+      topUl.innerHTML = "";
+      const conteo = {};
+      pedidos.filter(p => p.estado === "Entregado").forEach(p => {
+        if(!conteo[p.platoId]) conteo[p.platoId] = 0;
+        conteo[p.platoId]++;
+      });
+      const ordenado = Object.entries(conteo).sort((a,b) => b[1] - a[1]);
+      ordenado.slice(0,3).forEach(([idPlato, count]) => {
+        const plato = menu.find(m => m.id === idPlato);
+        if(plato) {
+          const li = document.createElement("li");
+          li.textContent = ${plato.nombre} (vendidos: ${count});
+          topUl.appendChild(li);
+        }
+      });
+    }
+
+    /********************************************************
+     *                INICIALIZACIÓN Y EVENTOS GLOBALES
+     ********************************************************/
+    document.addEventListener("DOMContentLoaded", () => {
+      loadData();
+
+      // Configurar navegación
+      const links = document.querySelectorAll(".nav-link");
+      const sections = document.querySelectorAll(".section-content");
+      document.getElementById("seccion-inicio").style.display = "block";
+      links.forEach(link => {
+        link.addEventListener("click", e => {
+          e.preventDefault();
+          const sectionToShow = link.getAttribute("data-section");
+          sections.forEach(sec => sec.style.display = "none");
+          document.getElementById(seccion-${sectionToShow}).style.display = "block";
+          if(sectionToShow === "inicio" || sectionToShow === "reportes"){
+            renderReportes();
+          }
+        });
+      });
+
+      // Botón "Ver Menú Semanal" en la hero
+      document.getElementById("btnMenuSemanal").addEventListener("click", () => {
+        alert("Aquí podrías mostrar un calendario o una lista detallada del menú semanal.");
+      });
+
+      // Configurar formularios
+      document.getElementById("form-menu").addEventListener("submit", e => {
+        e.preventDefault();
+        const nombre = document.getElementById("menu-nombre").value.trim();
+        const precio = parseFloat(document.getElementById("menu-precio").value) || 0;
+        const descripcion = document.getElementById("menu-descripcion").value.trim();
+        menu.push({ id: generateId(), nombre, precio, descripcion });
+        saveData();
+        renderMenu();
+        e.target.reset();
+      });
+      document.getElementById("form-pedidos").addEventListener("submit", e => {
+        e.preventDefault();
+        const clienteId = document.getElementById("pedido-cliente").value;
+        const platoId = document.getElementById("pedido-plato").value;
+        const estado = document.getElementById("pedido-estado").value;
+        pedidos.push({ id: generateId(), clienteId, platoId, estado });
+        saveData();
+        renderPedidos();
+        renderReportes();
+        e.target.reset();
+      });
+      document.getElementById("form-clientes").addEventListener("submit", e => {
+        e.preventDefault();
+        const nombre = document.getElementById("cliente-nombre").value.trim();
+        const telefono = document.getElementById("cliente-telefono").value.trim();
+        const direccion = document.getElementById("cliente-direccion").value.trim();
+        clientes.push({ id: generateId(), nombre, telefono, direccion });
+        saveData();
+        renderClientes();
+        renderReportes();
+        e.target.reset();
+      });
+      document.getElementById("form-insumos").addEventListener("submit", e => {
+        e.preventDefault();
+        const nombre = document.getElementById("insumo-nombre").value.trim();
+        const cantidad = parseFloat(document.getElementById("insumo-cantidad").value) || 0;
+        const unidad = document.getElementById("insumo-unidad").value.trim();
+        insumos.push({ id: generateId(), nombre, cantidad, unidad });
+        saveData();
+        renderInsumos();
+        renderReportes();
+        e.target.reset();
+      });
+
+      // Render inicial
+      renderMenu();
+      renderClientes();
+      renderPedidos();
+      renderInsumos();
+      renderReportes();
+
+      /*************** Configurar sección "Salir" ***************/
+      // Actualizar el mensaje de salida con la fecha y hora actuales
+      const mensajeSalida = document.getElementById("mensaje-salida");
+      if(mensajeSalida) {
+        const fechaActual = new Date();
+        mensajeSalida.textContent =
+          "Tu sesión finalizó el " +
+          fechaActual.toLocaleDateString() +
+          " a las " +
+          fechaActual.toLocaleTimeString();
+      }
+      // Configurar el botón para "Entrar a sesión"
+      const btnEntrarSesion = document.getElementById("btnEntrarSesion");
+      if(btnEntrarSesion) {
+        btnEntrarSesion.addEventListener("click", () => {
+          // Para simular el ingreso a sesión, mostramos un mensaje y regresamos a la sección inicio.
+          alert("Por favor, ingresa tu sesión. (Esta es una simulación de login.)");
+          sections.forEach(sec => sec.style.display = "none");
+          document.getElementById("seccion-inicio").style.display = "block";
+        });
+      }
+    });
+  </script>
+</body>
+</html>
