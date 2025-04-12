@@ -86,6 +86,26 @@
     <button onclick="verificarCodigo()">Confirmar</button>
   </section>
 
+  <header>
+    <img src="img/milogo.jpg" alt="Logo">
+    <nav>
+      <ul>
+        <li><a href="#" class="nav-link" data-target="inicio">Inicio</a></li>
+        <li><a href="#" class="nav-link" data-target="menu">Menú Semanal</a></li>
+        <li><a href="#" class="nav-link" data-target="clientes">Clientes</a></li>
+        <li><a href="#" class="nav-link" data-target="insumos">Insumos</a></li>
+        <li><a href="#" class="nav-link" data-target="reportes">Reportes</a></li>
+        <li><a href="#" class="nav-link" data-target="salir">Salir</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section id="inicio" class="section">
+      <h2>Bienvenido a The Healthy Box</h2>
+      <p>Usa el menú para comenzar a cargar información.</p>
+    </section>
+  </main>
+
   <script>
     let codigoGenerado = "";
 
@@ -113,7 +133,11 @@
 
     function verificarCodigo() {
       const ingresado = document.getElementById('codigoVerificacion').value;
-      if (ingresado === codigoGenerado) {
+      const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
+      if (usuarioGuardado && usuarioGuardado.codigo === ingresado) {
+        usuarioGuardado.verificado = true;
+        delete usuarioGuardado.codigo;
+        localStorage.setItem('usuario', JSON.stringify(usuarioGuardado));
         alert('Cuenta verificada con éxito');
         mostrarLogin();
       } else {
@@ -128,7 +152,7 @@
       const password = document.getElementById('registroPassword').value;
       codigoGenerado = generarCodigo();
       localStorage.setItem('usuario', JSON.stringify({ email, password, verificado: false, codigo: codigoGenerado }));
-      alert('Código de verificación: ' + codigoGenerado); // Simula el envío por email
+      alert('Código de verificación: ' + codigoGenerado);
       mostrarConfirmacion();
     });
 
@@ -153,20 +177,6 @@
         alert('Usuario o contraseña incorrectos');
       }
     });
-
-    function verificarCodigo() {
-      const ingresado = document.getElementById('codigoVerificacion').value;
-      const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
-      if (usuarioGuardado && usuarioGuardado.codigo === ingresado) {
-        usuarioGuardado.verificado = true;
-        delete usuarioGuardado.codigo;
-        localStorage.setItem('usuario', JSON.stringify(usuarioGuardado));
-        alert('Cuenta verificada con éxito');
-        mostrarLogin();
-      } else {
-        alert('Código incorrecto');
-      }
-    }
   </script>
 </body>
 </html>
